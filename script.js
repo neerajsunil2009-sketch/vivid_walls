@@ -424,14 +424,12 @@ function startDirectDownload(url, filename) {
         alert("Error: This wallpaper has no valid download link.");
         return;
     }
+    const encodedUrl = encodeURIComponent(url);
     
-    // Clean up line 428 to use 'url' instead of 'item.download'
-    const encodedUrl = encodeURIComponent(url); 
-    const serverUrl = `http://localhost:3000/download?url=${encodedUrl}&name=${filename}`;
-    
+    // Change this line to your live backend URL
+    const serverUrl = `https://vividwalls-backend.onrender.com/download?url=${encodedUrl}&name=${filename}`;
     window.location.href = serverUrl;
 }
-
 // Inside your displayItems loop, add this check:
 
    
