@@ -354,30 +354,40 @@ async function getPixabayVideos(query) {
 
 // --- 5. DISPLAY & INTERFACE LOGIC ---
 
-function displayItems(items, query = '') { // Make sure query is passed here if you check it
+function displayItems(items, query = '') {
     const gallery = document.getElementById('gallery');
     if (!items || items.length === 0) return;
-    
+
     gallery.innerHTML = ''; // Clear loader or old items
 
     items.forEach(item => {
         const card = document.createElement('div');
         card.className = 'wall-card';
 
-        // 1. Right here is where "item" is active! 
+        // 1. Setup Priority/Trending badge
         const trendingBadge = (item.author === 'ashik' && query === 'trending')
             ? `<div class="trending-badge">★ Priority</div>`
             : '';
 
+        // 2. Check if the item is a video / live wallpaper
         const isVideo = item.type === 'video' || (item.download && item.download.endsWith('.mp4'));
-        const content = isVideo 
-            ? `<video src="${item.preview}" loop muted onmouseover="this.play()" onmouseout="this.pause()"></video>` 
+        const content = isVideo
+            ? `<video src="${item.preview}" loop muted onmouseover="this.play()" onmouseout="this.pause()"></video>`
             : `<img src="${item.preview}" loading="lazy">`;
 
-        const extension = isVideo ? '.mp4' : '.jpg';
-        const fileName = `VividWalls-${Date.now()}${extension}`;
+        // 3. ✨ DYNAMIC FILENAME LOGIC (Creates clean names like 'superman' or 'spiderman')
+        let tagKeyword = 'wallpaper';
+        if (item.tags && item.tags.length > 0) {
+            // Take the first tag, trim spaces, and swap internal spaces with underscores
+            tagKeyword = item.tags[0].trim().toLowerCase().replace(/\s+/g, '_');
+        } else if (item.title) {
+            tagKeyword = item.title.trim().toLowerCase().replace(/\s+/g, '_');
+        }
 
-        // 2. Insert the trendingBadge template variable cleanly inside the card HTML string
+        const extension = isVideo ? '.mp4' : '.jpg';
+        const fileName = `${tagKeyword}${extension}`;
+
+        // 4. Insert the unified layout template directly into the card
         card.innerHTML = `
             ${trendingBadge}
             ${content}
@@ -390,10 +400,10 @@ function displayItems(items, query = '') { // Make sure query is passed here if 
                 </button>
             </div>
         `;
+        
         gallery.appendChild(card);
     });
 }
-
 // Navigation Logic
 function setMainCategory(type) {
     currentMain = type;
@@ -436,31 +446,36 @@ function startDirectDownload(url, filename) {
         return;
     }
 
-    // 🌟 CHECK IF IT'S A LOCAL IMAGE (Starts with 'images/')
-   // 🌟 CHECK IF IT'S A LOCAL IMAGE OR VIDEO FOLDER
+    // 1. DYNAMIC NAME CLEANER (Fail-safe backup check)
+    let cleanName = 'wallpaper';
+    let extension = url.endsWith('.mp4') ? 'mp4' : 'jpg';
+
+    if (filename && typeof filename === 'string' && !filename.includes('/') && !filename.includes('http')) {
+        // Remove extensions from the filename variable if passed in so we can handle it safely
+        cleanName = filename.split('.')[0].replace(/['"()]/g, '').trim().replace(/\s+/g, '_');
+    } else {
+        // Fallback: Squeeze out filename strings directly from the raw asset link path
+        const urlParts = url.split('/');
+        const lastPart = urlParts[urlParts.length - 1]; 
+        cleanName = lastPart.split('.')[0];
+    }
+
+    // 🌟 2. FRONTEND BYPASS: If asset points to a local image or video folder
     if (url.startsWith("images/") || url.startsWith("videos/")) {
         const link = document.createElement('a');
-        link.href = url;
+        link.href = url; // Directly download from local Vercel host space
         
-        // 1. Clean up the messy filename string if it's passed in
-        let cleanName = filename ? filename.replace(/['"()]/g, '').trim() : 'wallpaper';
-        
-        // 2. Force it to start with your brand name!
-        link.download = `Vivid_Walls_${cleanName}`; 
+        // Output format: Vivid_Walls_superman.jpg or Vivid_Walls_anime.mp4
+        link.download = `Vivid_Walls_${cleanName}.${extension}`; 
         
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        return; // Bypasses the Render server completely!
+        return; // Prevent execution from touching the Render proxy server
     }
-    // 🌐 OTHERWISE, USE YOUR RENDER PROXY SERVER FOR API WALLPAPERS
-    // 🌐 2. OTHERWISE, USE YOUR RENDER PROXY SERVER FOR EXTERNAL API WALLPAPERS
+
+    // 🌐 3. BACKEND PROXY: Route external API assets safely through Render to prevent CORS blockages
     const encodedUrl = encodeURIComponent(url);
-    
-    // Clean up the filename variable on the frontend first
-    let cleanName = filename ? filename.replace(/['"()]/g, '').trim().replace(/\s+/g, '_') : 'wallpaper';
-    
-    // Add the name parameter to the end of the server link!
     const serverUrl = `https://vividwalls-backend.onrender.com/download?url=${encodedUrl}&name=${encodeURIComponent(cleanName)}`;
     window.location.href = serverUrl;
 }
