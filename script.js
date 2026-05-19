@@ -454,8 +454,14 @@ function startDirectDownload(url, filename) {
         return; // Bypasses the Render server completely!
     }
     // 🌐 OTHERWISE, USE YOUR RENDER PROXY SERVER FOR API WALLPAPERS
+    // 🌐 2. OTHERWISE, USE YOUR RENDER PROXY SERVER FOR EXTERNAL API WALLPAPERS
     const encodedUrl = encodeURIComponent(url);
-    const serverUrl = `https://vividwalls-backend.onrender.com/download?url=${encodedUrl}`;
+    
+    // Clean up the filename variable on the frontend first
+    let cleanName = filename ? filename.replace(/['"()]/g, '').trim().replace(/\s+/g, '_') : 'wallpaper';
+    
+    // Add the name parameter to the end of the server link!
+    const serverUrl = `https://vividwalls-backend.onrender.com/download?url=${encodedUrl}&name=${encodeURIComponent(cleanName)}`;
     window.location.href = serverUrl;
 }
 // Inside your displayItems loop, add this check:
