@@ -446,36 +446,31 @@ function startDirectDownload(url, filename) {
         return;
     }
 
-    // 1. DYNAMIC NAME CLEANER (Fail-safe backup check)
-    let cleanName = 'wallpaper';
-    let extension = url.endsWith('.mp4') ? 'mp4' : 'jpg';
-
-    if (filename && typeof filename === 'string' && !filename.includes('/') && !filename.includes('http')) {
-        // Remove extensions from the filename variable if passed in so we can handle it safely
-        cleanName = filename.split('.')[0].replace(/['"()]/g, '').trim().replace(/\s+/g, '_');
-    } else {
-        // Fallback: Squeeze out filename strings directly from the raw asset link path
-        const urlParts = url.split('/');
-        const lastPart = urlParts[urlParts.length - 1]; 
-        cleanName = lastPart.split('.')[0];
-    }
-
-    // 🌟 2. FRONTEND BYPASS: If asset points to a local image or video folder
+    // 🌟 CHECK IF IT'S A LOCAL IMAGE (Starts with 'images/')
+   // 🌟 CHECK IF IT'S A LOCAL IMAGE OR VIDEO FOLDER
     if (url.startsWith("images/") || url.startsWith("videos/")) {
         const link = document.createElement('a');
-        link.href = url; // Directly download from local Vercel host space
+        link.href = url;
         
-        // Output format: Vivid_Walls_superman.jpg or Vivid_Walls_anime.mp4
-        link.download = `Vivid_Walls_${cleanName}.${extension}`; 
+        // 1. Clean up the messy filename string if it's passed in
+        let cleanName = filename ? filename.replace(/['"()]/g, '').trim() : 'wallpaper';
+        
+        // 2. Force it to start with your brand name!
+        link.download = `Vivid_Walls_${cleanName}`; 
         
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        return; // Prevent execution from touching the Render proxy server
+        return; // Bypasses the Render server completely!
     }
-
-    // 🌐 3. BACKEND PROXY: Route external API assets safely through Render to prevent CORS blockages
+    // 🌐 OTHERWISE, USE YOUR RENDER PROXY SERVER FOR API WALLPAPERS
+    // 🌐 2. OTHERWISE, USE YOUR RENDER PROXY SERVER FOR EXTERNAL API WALLPAPERS
     const encodedUrl = encodeURIComponent(url);
+    
+    // Clean up the filename variable on the frontend first
+    let cleanName = filename ? filename.replace(/['"()]/g, '').trim().replace(/\s+/g, '_') : 'wallpaper';
+    
+    // Add the name parameter to the end of the server link!
     const serverUrl = `https://vividwalls-backend.onrender.com/download?url=${encodedUrl}&name=${encodeURIComponent(cleanName)}`;
     window.location.href = serverUrl;
 }
