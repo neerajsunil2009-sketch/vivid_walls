@@ -4,36 +4,37 @@ const KEYS = {
     pixabay: '55660755-90f69456cc2ac320284d8b998',
 };
 const manualPhotos = [
-     {
-        type: 'image',
-        preview: 'images/@fusionwallvibe_threadsmate.com_1779209094.jpg',// Correct: No / at the start
-        download: 'images/@fusionwallvibe_threadsmate.com_1779209094.jpg',
-        aspect:'pc',
-        author: 'Akshay',
-        tags: ['deamon slayer', 'anime', 'superman','trending','all'],
-        isTrending: true
-        
-    },
-    {
-        type: 'image',
-        preview: 'images/superman.webp',// Correct: No / at the start
-        download: 'images/superman.webp',
-        aspect:'mobile',
-        author: 'Akshay',
-        tags: ['superhero', 'dc', 'superman','trending','all'],
-        isTrending: true
-        
-    },
-     {
-        type: 'image',
-        preview: 'images/spiderman.jpg',// Correct: No / at the start
-        download: 'images/spiderman.jpg',
-        author: 'Akshay',
-        aspect:'mobile',
-        tags: ['superhero', 'marvel', 'spiderman','trending','all'],
-        isTrending: true
-        
-    },
+     
+  {
+    id: 'custom_anime_01', // 👈 Add this line right here
+    type: 'image',
+    preview: 'images/@fusionwallvibe_threadsmate.com_1779209094.jpg',
+    download: 'images/@fusionwallvibe_threadsmate.com_1779209094.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['deamon slayer', 'anime', 'superman', 'trending', 'all'],
+    isTrending: true
+  },
+  {
+    id: 'custom_superman_02', // 👈 Add this line right here
+    type: 'image',
+    preview: 'images/superman.webp',
+    download: 'images/superman.webp',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['superhero', 'dc', 'superman', 'trending', 'all'],
+    isTrending: true
+  },
+  {
+    id: 'custom_spiderman_03', // 👈 Add this line right here
+    type: 'image',
+    preview: 'images/spiderman.jpg',
+    download: 'images/spiderman.jpg',
+    author: 'Akshay',
+    aspect: 'mobile',
+    tags: ['superhero', 'marvel', 'spiderman', 'trending', 'all'],
+    isTrending: true
+  },
      {
         type: 'image',
         preview: 'images/@aidigital_sensei_threadsmate.com_1778321455.jpg',// Correct: No / at the start
@@ -434,10 +435,21 @@ function startDirectDownload(url, filename) {
         alert("Error: This wallpaper has no valid download link.");
         return;
     }
+
+    // 🌟 CHECK IF IT'S A LOCAL IMAGE (Starts with 'images/')
+    if (url.startsWith("images/")) {
+        const link = document.createElement('a');
+        link.href = url; // Uses your local path like 'images/superman.webp'
+        link.download = filename || 'wallpaper'; // Saves it with the item's filename
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return; // Stop the function here so it doesn't hit the backend server!
+    }
+
+    // 🌐 OTHERWISE, USE YOUR RENDER PROXY SERVER FOR API WALLPAPERS
     const encodedUrl = encodeURIComponent(url);
-    
-    // Change this line to your live backend URL
-    const serverUrl = `https://vividwalls-backend.onrender.com/download?url=${encodedUrl}&name=${filename}`;
+    const serverUrl = `https://vividwalls-backend.onrender.com/download?url=${encodedUrl}`;
     window.location.href = serverUrl;
 }
 // Inside your displayItems loop, add this check:
