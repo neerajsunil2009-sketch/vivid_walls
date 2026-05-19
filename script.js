@@ -436,18 +436,24 @@ function startDirectDownload(url, filename) {
         return;
     }
 
-    // 🌟 CHECK IF IT'S A LOCAL IMAGE (Starts with 'images/')
-    if (url.startsWith("images/")) {
+    // 🌟 1. CHECK IF IT'S A LOCAL IMAGE OR LIVE WALLPAPER (VIDEO) FOLDER
+    if (url.startsWith("images/") || url.startsWith("videos/")) {
         const link = document.createElement('a');
-        link.href = url; // Uses your local path like 'images/superman.webp'
-        link.download = filename || 'wallpaper'; // Saves it with the item's filename
+        link.href = url; // Works perfectly for both 'images/...' and 'videos/...'
+        
+        // Clean up any weird characters in the filename string if passed
+        let cleanName = filename ? filename.replace(/['"()]/g, '').trim() : 'wallpaper';
+        
+        // Force it to save with your brand name prefix!
+        link.download = `Vivid_Walls_${cleanName}`; 
+        
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        return; // Stop the function here so it doesn't hit the backend server!
+        return; // Bypasses the Render server completely for local assets!
     }
 
-    // 🌐 OTHERWISE, USE YOUR RENDER PROXY SERVER FOR API WALLPAPERS
+    // 🌐 2. OTHERWISE, USE YOUR RENDER PROXY SERVER FOR EXTERNAL API WALLPAPERS
     const encodedUrl = encodeURIComponent(url);
     const serverUrl = `https://vividwalls-backend.onrender.com/download?url=${encodedUrl}`;
     window.location.href = serverUrl;
