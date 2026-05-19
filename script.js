@@ -4,6 +4,16 @@ const KEYS = {
     pixabay: '55660755-90f69456cc2ac320284d8b998',
 };
 const manualPhotos = [
+     {
+        type: 'image',
+        preview: 'images/@fusionwallvibe_threadsmate.com_1779209094.jpg',// Correct: No / at the start
+        download: 'images/@fusionwallvibe_threadsmate.com_1779209094.jpg',
+        aspect:'pc',
+        author: 'Akshay',
+        tags: ['deamon slayer', 'anime', 'superman','trending','all'],
+        isTrending: true
+        
+    },
     {
         type: 'image',
         preview: 'images/superman.webp',// Correct: No / at the start
