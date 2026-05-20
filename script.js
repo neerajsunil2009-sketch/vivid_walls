@@ -358,36 +358,41 @@ function displayItems(items, query = '') {
     const gallery = document.getElementById('gallery');
     if (!items || items.length === 0) return;
 
-    gallery.innerHTML = ''; // Clear loader or old items
+    gallery.innerHTML = ''; 
 
     items.forEach(item => {
         const card = document.createElement('div');
         card.className = 'wall-card';
+
+        // Combine all tags into a clean comma-separated string for Google bots to read
+        const searchKeywords = item.tags ? item.tags.join(', ') : 'wallpaper';
+        // Create a SEO friendly title string
+        const seoTitle = `${item.tags && item.tags[0] ? item.tags[0] : 'aesthetic'} wallpaper - Vivid Walls`;
+
+        // Apply tags as data attributes to the card element container for crawling accessibility
+        card.setAttribute('data-keywords', searchKeywords);
 
         // 1. Setup Priority/Trending badge
         const trendingBadge = (item.author === 'ashik' && query === 'trending')
             ? `<div class="trending-badge">★ Priority</div>`
             : '';
 
-        // 2. Check if the item is a video / live wallpaper
+        // 2. Build media content tags with explicit descriptive keywords embedded 
         const isVideo = item.type === 'video' || (item.download && item.download.endsWith('.mp4'));
         const content = isVideo
-            ? `<video src="${item.preview}" loop muted onmouseover="this.play()" onmouseout="this.pause()"></video>`
-            : `<img src="${item.preview}" loading="lazy">`;
-
-        // 3. ✨ DYNAMIC FILENAME LOGIC (Creates clean names like 'superman' or 'spiderman')
-        let tagKeyword = 'wallpaper';
-        if (item.tags && item.tags.length > 0) {
-            // Take the first tag, trim spaces, and swap internal spaces with underscores
-            tagKeyword = item.tags[0].trim().toLowerCase().replace(/\s+/g, '_');
-        } else if (item.title) {
-            tagKeyword = item.title.trim().toLowerCase().replace(/\s+/g, '_');
-        }
+            ? `<video src="${item.preview}" title="${seoTitle} (${searchKeywords})" aria-label="${seoTitle}" loop muted onmouseover="this.play()" onmouseout="this.pause()"></video>`
+            : `<img src="${item.preview}" alt="${seoTitle} - ${searchKeywords}" title="${seoTitle}" loading="lazy">`; 
 
         const extension = isVideo ? '.mp4' : '.jpg';
+        
+        // Use the first tag keyword for file naming
+        let tagKeyword = 'wallpaper';
+        if (item.tags && item.tags.length > 0) {
+            tagKeyword = item.tags[0].trim().toLowerCase().replace(/\s+/g, '_');
+        }
         const fileName = `${tagKeyword}${extension}`;
 
-        // 4. Insert the unified layout template directly into the card
+        // 3. Render the card element layout structure
         card.innerHTML = `
             ${trendingBadge}
             ${content}
@@ -395,7 +400,8 @@ function displayItems(items, query = '') {
                 <span>By ${item.author || 'Akshay'}</span>
                 <button 
                     onclick="startDirectDownload('${item.download || item.preview}', '${fileName}')" 
-                    class="download-btn">
+                    class="download-btn"
+                    aria-label="Download ${seoTitle}">
                     Download
                 </button>
             </div>
