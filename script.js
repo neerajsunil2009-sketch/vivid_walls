@@ -396,6 +396,43 @@ const manualPhotos = [
     // 🌟 General trending aesthetic matching
     tags: ['trending', 'cool', 'cat', 'aesthetic', 'animals', '4k wallpaper', 'all'],
     isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@cars.wallpaper13_threadsmate.com_1779358001.jpg',
+    download: 'images/@cars.wallpaper13_threadsmate.com_1779358001.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Set as trending matching your lightning mcqueen cartoon theme
+    tags: ['car bike', 'car cartoon', 'mcqueen', 'trending', 'cool', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@cars.wallpaper13_threadsmate.com_1779358005.jpg',
+    download: 'images/@cars.wallpaper13_threadsmate.com_1779358005.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['car bike', 'bmw', 'car aesthetic', 'cool', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@cars.wallpaper13_threadsmate.com_1779358007.jpg',
+    download: 'images/@cars.wallpaper13_threadsmate.com_1779358007.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['car bike', 'car cartoon', 'cartoon', 'aesthetic', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@cars.wallpaper13_threadsmate.com_1779358009.jpg',
+    download: 'images/@cars.wallpaper13_threadsmate.com_1779358009.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['car bike', 'bmw', 'sports car', 'cool', '4k wallpaper', 'all'],
+    isTrending: false
   }
     
 ];
