@@ -146,6 +146,188 @@ const manualPhotos = [
         
     },
     {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355676.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355676.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'ronaldihno', '4k wallpaper', 'football', 'trending', 'brazil'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355685.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355685.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'trending', ,'messi','argentina'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355687.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355687.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'trending', 'ronaldo'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355689.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355689.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'trending', 'acm'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355691.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355691.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'foootball', 'trending', 'pedri'],
+    isTrending: true
+  },
+
+  // 📋 REMAINING 15 REGULAR SPORTS WALLPAPERS
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355692.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355692.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'beckham'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355695.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355695.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', 'football', 'athletes', 'yamal'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355697.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355697.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football ', 'yamal'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355699.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355699.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'real madrid','modric'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355701.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355701.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'brazil','ronaldo'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355703.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355703.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'acm'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355705.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355705.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'mbappe'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355708.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355708.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355710.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355710.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355712.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355712.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'neon courts', 'manchester city'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355714.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355714.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'ronaldo'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355715.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355715.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'modric'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355717.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355717.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'messi'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355719.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355719.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'messi'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@dyslove.design_threadsmate.com_1779355721.jpg',
+    download: 'images/@dyslove.design_threadsmate.com_1779355721.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'ronaldo'],
+    isTrending: false
+  },
+    {
         preview: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
         download: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
         author: 'Akshay',
