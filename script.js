@@ -433,6 +433,86 @@ const manualPhotos = [
     author: 'Akshay',
     tags: ['car bike', 'bmw', 'sports car', 'cool', '4k wallpaper', 'all'],
     isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@lxraaron45_threadsmate.com_1779358775.jpg',
+    download: 'images/@lxraaron45_threadsmate.com_1779358775.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Car & Bike navigation + trending matching
+    tags: ['car bike', 'car', 'dodge', 'aesthetic', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@lxraaron45_threadsmate.com_1779358777.jpg',
+    download: 'images/@lxraaron45_threadsmate.com_1779358777.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 General trending aesthetic matching
+    tags: ['trending', 'galaxy', 'cool', 'aesthetic', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@lxraaron45_threadsmate.com_1779358779.jpg',
+    download: 'images/@lxraaron45_threadsmate.com_1779358779.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 DC navigation + trending matching
+    tags: ['dc', 'batman', 'trending', 'superhero', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@lxraaron45_threadsmate.com_1779358781.jpg',
+    download: 'images/@lxraaron45_threadsmate.com_1779358781.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Car & Bike navigation + trending matching
+    tags: ['car bike', 'supra', 'car', 'trending', 'cool', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@lxraaron45_threadsmate.com_1779358784.jpg',
+    download: 'images/@lxraaron45_threadsmate.com_1779358784.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Sports navigation matching
+    tags: ['sports', 'redbull racer f1', 'f1 racing', 'sports car', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@lxraaron45_threadsmate.com_1779358786.jpg',
+    download: 'images/@lxraaron45_threadsmate.com_1779358786.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Car & Bike navigation matching
+    tags: ['car bike', 'bike ghost rider', 'motorcycle', 'cool', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/@lxraaron45_threadsmate.com_1779358789.jpg',
+    download: 'images/@lxraaron45_threadsmate.com_1779358789.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Sports navigation matching
+    tags: ['sports', 'ronaldo', 'cr7', 'football', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@lxraaron45_threadsmate.com_1779358791.jpg',
+    download: 'images/@lxraaron45_threadsmate.com_1779358791.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Sports navigation matching
+    tags: ['sports', 'messi', 'soccer', 'football', '4k wallpaper', 'all'],
+    isTrending: true
   }
     
 ];
