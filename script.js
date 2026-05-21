@@ -548,8 +548,8 @@ const manualVideos = [
     },
     {
     type: 'video', // 🌟 Set to video for .mp4 playback
-    preview: 'images/@galidatorotaku_threadsmate.com_1779361061.mp4',
-    download: 'images/@galidatorotaku_threadsmate.com_1779361061.mp4',
+    preview: 'videos/@galidatorotaku_threadsmate.com_1779361061.mp4',
+    download: 'videos/@galidatorotaku_threadsmate.com_1779361061.mp4',
     aspect: 'pc',
     author: 'Akshay',
     tags: ['anime', 'trending', 'cool', 'live wallpaper', '4k video', 'all'],
@@ -557,16 +557,16 @@ const manualVideos = [
   },
   {
     type: 'video', // 🌟 Set to video for .mp4 playback
-    preview: 'images/@official_anime_artist_threadsmate.com_1779361101.mp4',
-    download: 'images/@official_anime_artist_threadsmate.com_1779361101.mp4',
+    preview: 'videos/@official_anime_artist_threadsmate.com_1779361101.mp4',
+    download: 'videos/@official_anime_artist_threadsmate.com_1779361101.mp4',
     aspect: 'pc',
     author: 'Akshay',
     tags: ['anime', 'trending', 'cool', 'live wallpaper', '4k video', 'all'],
     isTrending: true
   },
   {
-    type: 'videos', // 🌟 Set to video for .mp4 playback
-    preview: 'images/@4k_sahaj_threadsmate.com_1779361178.mp4',
+    type: 'video', // 🌟 Set to video for .mp4 playback
+    preview: 'videos/@4k_sahaj_threadsmate.com_1779361178.mp4',
     download: 'videos/@4k_sahaj_threadsmate.com_1779361178.mp4',
     aspect: 'pc',
     author: 'Akshay',
