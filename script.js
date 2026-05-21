@@ -10,7 +10,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352882.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['anime wallpaper', '4k wallpaper', 'mobile wallpaper', 'aesthetic background', 'trending', 'all'],
+    tags: ['anime wallpaper', '4k wallpaper', 'mobile wallpaper', 'anime', 'trending', 'demon slayer'],
     isTrending: true
   },
   {
@@ -19,7 +19,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352877.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['marvel wallpaper', '4k wallpaper', 'superhero background', 'phone wallpaper', 'trending', 'all'],
+    tags: ['marvel wallpaper', '4k wallpaper', 'anime', 'phone wallpaper', 'trending', 'demon slayer'],
     isTrending: true
   },
   {
@@ -28,7 +28,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352875.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['live wallpaper', '4k wallpaper', 'amoled wallpaper', 'dark background', 'trending', 'all'],
+    tags: ['live wallpaper', '4k wallpaper', 'amoled wallpaper', 'inosuke', 'trending', 'anime','demon slayer'],
     isTrending: true
   },
   {
@@ -37,7 +37,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352872.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['anime wallpaper', '4k wallpaper', 'cool wallpaper', 'hd graphics', 'trending', 'all'],
+    tags: ['anime wallpaper', '4k wallpaper', 'cool wallpaper', 'hd graphics', 'trending', 'anime'],
     isTrending: true
   },
   {
@@ -46,7 +46,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352869.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['marvel wallpaper', 'live wallpaper', 'phone theme', '4k background', 'trending', 'all'],
+    tags: ['girl', 'live wallpaper', 'phone theme', '4k background', 'trending', 'anime'],
     isTrending: true
   },
   {
@@ -55,7 +55,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352867.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['4k wallpaper', 'anime wallpaper', 'minimalist aesthetic', 'mobile setup', 'trending', 'all'],
+    tags: ['demon slayer', 'anime wallpaper', 'minimalist aesthetic', 'mobile setup', 'trending', 'asime'],
     isTrending: true
   },
   {
@@ -64,7 +64,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352864.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['marvel wallpaper', '4k wallpaper', 'gaming background', 'hd lockscreen', 'trending', 'all'],
+    tags: ['demon slayer', '4k wallpaper', 'gaming background', 'hd lockscreen', 'trending', 'anime'],
     isTrending: true
   },
   {
@@ -73,7 +73,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352861.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['live wallpaper', 'anime wallpaper', '4k resolution', 'premium background', 'trending', 'all'],
+    tags: ['anime', 'demon slayer', '4k resolution', 'premium background', 'trending', ''],
     isTrending: true
   },
   {
@@ -82,7 +82,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352858.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['4k wallpaper', 'marvel wallpaper', 'desktop layout', 'phone home screen', 'trending', 'all'],
+    tags: ['4k wallpaper', '', 'desktop layout', 'phone home screen', 'trending', 'anime'],
     isTrending: true
   },
   {
@@ -91,7 +91,7 @@ const manualPhotos = [
     download: 'images/@aryan_lanjhewar_threadsmate.com_1779352760.jpg',
     aspect: 'mobile',
     author: 'Akshay',
-    tags: ['anime wallpaper', 'live wallpaper', '4k wallpaper', 'cyberpunk aesthetic', 'trending', 'all'],
+    tags: ['anime wallpaper', 'live wallpaper', '4k wallpaper', 'naruto', 'anime', 'all'],
     isTrending: true
   },
      
