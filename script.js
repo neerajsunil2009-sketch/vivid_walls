@@ -366,7 +366,37 @@ const manualPhotos = [
         tags: ['car&bike', 'trending', 'bmw', 'm4 competition','all'],
         aspect: 'pc',
          isTrending: true
-    }
+    },
+    {
+    type: 'image',
+    preview: 'images/@krunalpatel.man_threadsmate.com_1779357936.jpg',
+    download: 'images/@krunalpatel.man_threadsmate.com_1779357936.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Car & Bike target filter matching
+    tags: ['car bike', 'car aesthetic', 'cool', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@krunalpatel.man_threadsmate.com_1779357940.jpg',
+    download: 'images/@krunalpatel.man_threadsmate.com_1779357940.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 Cartoon & Pikachu target filter matching
+    tags: ['cartoon', 'trending', 'cool', 'pikachu', 'aesthetic', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@krunalpatel.man_threadsmate.com_1779357943.jpg',
+    download: 'images/@krunalpatel.man_threadsmate.com_1779357943.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    // 🌟 General trending aesthetic matching
+    tags: ['trending', 'cool', 'cat', 'aesthetic', 'animals', '4k wallpaper', 'all'],
+    isTrending: true
+  }
     
 ];
 const manualVideos = [
