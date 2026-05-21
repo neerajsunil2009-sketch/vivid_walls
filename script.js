@@ -373,6 +373,24 @@ const manualPhotos = [
     tags: ['anime', 'naruto', 'trending', '4k wallpaper', 'all'],
     isTrending: true
   },
+  {
+    type: 'image',
+    preview: 'images/@glow.grid0_threadsmate.com_1779362131.jpg',
+    download: 'images/@glow.grid0_threadsmate.com_1779362131.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'itachi', 'trending', 'naruto', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@glow.grid0_threadsmate.com_1779362134.jpg',
+    download: 'images/@glow.grid0_threadsmate.com_1779362134.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'obito', 'naruto', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
 
     {
         preview: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
