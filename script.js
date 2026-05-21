@@ -565,9 +565,9 @@ const manualVideos = [
     isTrending: true
   },
   {
-    type: 'video', // 🌟 Set to video for .mp4 playback
+    type: 'videos', // 🌟 Set to video for .mp4 playback
     preview: 'images/@4k_sahaj_threadsmate.com_1779361178.mp4',
-    download: 'images/@4k_sahaj_threadsmate.com_1779361178.mp4',
+    download: 'videos/@4k_sahaj_threadsmate.com_1779361178.mp4',
     aspect: 'pc',
     author: 'Akshay',
     tags: ['anime', 'trending', 'cool', 'live wallpaper', '4k video', 'all'],
