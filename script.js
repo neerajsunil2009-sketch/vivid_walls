@@ -327,6 +327,53 @@ const manualPhotos = [
     tags: ['sports', 'sports wallpaper', '4k wallpaper', 'football', 'ronaldo'],
     isTrending: false
   },
+  
+  {
+    type: 'image',
+    preview: 'images/@glow.grid0_threadsmate.com_1779362129.jpg',
+    download: 'images/@glow.grid0_threadsmate.com_1779362129.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'trending', 'naruto', 'kakashi', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@glow.grid0_threadsmate.com_1779362128.jpg',
+    download: 'images/@glow.grid0_threadsmate.com_1779362128.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'trending', 'naruto', 'madara', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@glow.grid0_threadsmate.com_1779362118.jpg',
+    download: 'images/@glow.grid0_threadsmate.com_1779362118.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'naruto', 'minato', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@glow.grid0_threadsmate.com_1779362116.jpg',
+    download: 'images/@glow.grid0_threadsmate.com_1779362116.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'naruto', 'sasuke', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/@glow.grid0_threadsmate.com_1779362114.jpg',
+    download: 'images/@glow.grid0_threadsmate.com_1779362114.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'naruto', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+
     {
         preview: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
         download: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
