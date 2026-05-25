@@ -631,6 +631,89 @@ const manualPhotos = [
     tags: ['anime', 'jujutsu kaisen', 'aesthetic', '4k wallpaper', 'all'],
     isTrending: false
   },
+  {
+    type: 'image',
+    preview: 'images/704041749 17928839397318799_8395697110865817792_n (1).jpg',
+    download: 'images/704041749 17928839397318799_8395697110865817792_n (1).jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/705306231_17928839406318799_3628458130831476015_n.jpg',
+    download: 'images/705306231_17928839406318799_3628458130831476015_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'trending', 'cool', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706595084_17928839424318799_6719612333090439539_n.jpg',
+    download: 'images/706595084_17928839424318799_6719612333090439539_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'trending', 'dark', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+
+  // 📋 REMAINING 6 REGULAR ASSETS
+  {
+    type: 'image',
+    preview: 'images/706610916_17928839352318799_4534062396696578224_n.jpg',
+    download: 'images/706610916_17928839352318799_4534062396696578224_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'cool', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706417319_17928839415318799_8301239656987074787_n.jpg',
+    download: 'images/706417319_17928839415318799_8301239656987074787_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'aesthetic', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706155142_17928839373318799_5267717860168338820_n.jpg',
+    download: 'images/706155142_17928839373318799_5267717860168338820_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'power', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706483503_17928839394318799_86467049974750583_n.jpg',
+    download: 'images/706483503_17928839394318799_86467049974750583_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'art', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706704349_17928839382318799_2004684201787200059_n.jpg',
+    download: 'images/706704349_17928839382318799_2004684201787200059_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'cool', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706583232_17928839376318799_7651163147844994783_n.jpg',
+    download: 'images/706583232_17928839376318799_7651163147844994783_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'one piece', 'monsters', 'aesthetic', '4k wallpaper', 'all'],
+    isTrending: false
+  },
 
     {
         preview: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
