@@ -856,6 +856,16 @@ const manualVideos = [
     {
         type: 'video',
         type: 'video',
+        preview: 'videos/crimson-blind-faith.3840x2160.mp4',
+        download: 'videos/crimson-blind-faith.3840x2160.mp4',
+        author: 'Akshay',
+        tags: ['anime', 'trending', 'aesthetic', 'all','crimson blind faith'],
+        aspect: 'pc',
+        isTrending: true
+    },
+    {
+        type: 'video',
+        type: 'video',
         preview: 'videos/threadsdownloader.com_d5e4e7 (4).mp4',
         download: 'videos/threadsdownloader.com_d5e4e7 (4).mp4',
         author: 'Akshay',
