@@ -391,6 +391,107 @@ const manualPhotos = [
     tags: ['anime', 'obito', 'naruto', 'trending', '4k wallpaper', 'all'],
     isTrending: true
   },
+  {
+    type: 'image',
+    preview: 'images/705947874_17927507430307703_7387215288807994970_n.jpg',
+    download: 'images/705947874_17927507430307703_7387215288807994970_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'trending', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/705547348_17927507526307703_5962647623038935783_n.jpg',
+    download: 'images/705547348_17927507526307703_5962647623038935783_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'trending', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/705705816_17927507481307703_4750432269521556448_n.jpg',
+    download: 'images/705705816_17927507481307703_4750432269521556448_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'trending', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706089356_17927507505307703_7046041766369253689_n.jpg',
+    download: 'images/706089356_17927507505307703_7046041766369253689_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'trending', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/705411579_17927507502307703_1062898232276320150_n.jpg',
+    download: 'images/705411579_17927507502307703_1062898232276320150_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'trending', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+
+  // 📋 REMAINING 6 REGULAR FOOTBALL WALLPAPERS
+  {
+    type: 'image',
+    preview: 'images/705968788_17927507520307703_6104956002683395593_n.jpg',
+    download: 'images/705968788_17927507520307703_6104956002683395593_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/705968350_17927507463307703_2141334297810331427_n.jpg',
+    download: 'images/705968350_17927507463307703_2141334297810331427_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/705428848_17927507514307703_4766240041584511846_n.jpg',
+    download: 'images/705428848_17927507514307703_4766240041584511846_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/705907417_17927507454307703_1096438382365743811_n.jpg',
+    download: 'images/705907417_17927507454307703_1096438382365743811_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706154853_17927507478307703_916297327551254777_n.jpg',
+    download: 'images/706154853_17927507478307703_916297327551254777_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/705842406_17927507523307703_4058218369107129371_n.jpg',
+    download: 'images/705842406_17927507523307703_4058218369107129371_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['sports', 'football', 'sports wallpaper', '4k wallpaper', 'all'],
+    isTrending: false
+  },
 
     {
         preview: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
