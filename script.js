@@ -633,8 +633,8 @@ const manualPhotos = [
   },
   {
     type: 'image',
-    preview: 'images/704041749 17928839397318799_8395697110865817792_n (1).jpg',
-    download: 'images/704041749 17928839397318799_8395697110865817792_n (1).jpg',
+    preview: 'images/704041749 17928839397318799_8395697110865817792_n.jpg',
+    download: 'images/704041749 17928839397318799_8395697110865817792_n.jpg',
     aspect: 'mobile',
     author: 'Akshay',
     tags: ['anime', 'one piece', 'monsters', 'trending', '4k wallpaper', 'all'],
