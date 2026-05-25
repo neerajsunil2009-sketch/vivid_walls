@@ -548,6 +548,89 @@ const manualPhotos = [
     tags: ['anime', 'art', '4k wallpaper', 'all','goku'],
     isTrending: false
   },
+  {
+    type: 'image',
+    preview: 'images/706028752_18105165082856296_746937656786347186_n.jpg',
+    download: 'images/706028752_18105165082856296_746937656786347186_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'gojo', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/705018794_18105165055856296_8072736958927149336_n.jpg',
+    download: 'images/705018794_18105165055856296_8072736958927149336_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'sukuna', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706028752_18105165109856296_3095300187899950749_n.jpg',
+    download: 'images/706028752_18105165109856296_3095300187899950749_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'sukuna', 'trending', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+
+  // 📋 REMAINING 7 REGULAR JJK WALLPAPERS
+  {
+    type: 'image',
+    preview: 'images/706744853_18105165046856296_3257492604659384275_n.jpg',
+    download: 'images/706744853_18105165046856296_3257492604659384275_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'cool', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/705270134_18105165079856296_935923926582612140_n.jpg',
+    download: 'images/705270134_18105165079856296_935923926582612140_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'aesthetic', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706417448_18105165100856296_217636687246969443_n.jpg',
+    download: 'images/706417448_18105165100856296_217636687246969443_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'dark', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/705528429_18105165037856296_7958701561116729926_n.jpg',
+    download: 'images/705528429_18105165037856296_7958701561116729926_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'art', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/705387983_18105165091856296_7898819039817448622_n.jpg',
+    download: 'images/705387983_18105165091856296_7898819039817448622_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'cool', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706028759_18105165028856296_272631225059686156_n.jpg',
+    download: 'images/706028759_18105165028856296_272631225059686156_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'aesthetic', '4k wallpaper', 'all'],
+    isTrending: false
+  },
 
     {
         preview: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
