@@ -492,6 +492,62 @@ const manualPhotos = [
     tags: ['sports', 'football', 'sports wallpaper', '4k wallpaper', 'all'],
     isTrending: false
   },
+  {
+    type: 'image',
+    preview: 'images/707188486_18075056351404498_2355728803971453872_n.jpg',
+    download: 'images/707188486_18075056351404498_2355728803971453872_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'trending', 'cool', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/705320462_18075056315404498_44815302352151727_n.jpg',
+    download: 'images/705320462_18075056315404498_44815302352151727_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'trending', 'aesthetic', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706839600_18075056324404498_3816577762375908360_n.jpg',
+    download: 'images/706839600_18075056324404498_3816577762375908360_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'trending', 'dark', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+
+  // 📋 REMAINING 3 REGULAR ANIME WALLPAPERS
+  {
+    type: 'image',
+    preview: 'images/705320217_18075056333404498_2580082520107551811_n.jpg',
+    download: 'images/705320217_18075056333404498_2580082520107551811_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'cool', '4k wallpaper', 'all'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/707445769_18075056342404498_6287185971199722827_n.jpg',
+    download: 'images/707445769_18075056342404498_6287185971199722827_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'aesthetic', '4k wallpaper', 'all','demon slayer'],
+    isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/705399768_18075056306404498_2227378974928130107_n.jpg',
+    download: 'images/705399768_18075056306404498_2227378974928130107_n.jpg',
+    aspect: 'mobile',
+    author: 'Akshay',
+    tags: ['anime', 'art', '4k wallpaper', 'all','goku'],
+    isTrending: false
+  },
 
     {
         preview: 'images/@call_me_baba5161_threadsmate.com_1778322805.jpg',
