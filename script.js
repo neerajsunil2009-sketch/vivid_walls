@@ -2,6 +2,7 @@ const KEYS = {
     unsplash: 'yr1wxgn6oZ2XeIZcbZwBPpsImtrY6Ah8ZIn0DJ6cqiE',
     pexels: 'o1X7PyrGxEiaDgdyxq6j2ewlQsU8wBGg6ZIENUBThf4yudD59NiE2QUc',
     pixabay: '55660755-90f69456cc2ac320284d8b998',
+    giphy:'uoq7COESx8HCtVEt6wx4FwPpXuwKb6WM',
 };
 const manualPhotos = [
     {
@@ -1483,7 +1484,48 @@ async function getPixabayPhotos(query) {
         author: img.user
     }));
 }
+async function getWallhavenPhotos(query) {
+  try {
+    // Wallhaven format requires 'widescreen' or 'portrait' instead of 'landscape'/'portrait'
+    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
+    
+    const res = await fetch(`https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`);
+    const data = await res.json();
+    
+    return (data.data || []).map(img => ({
+      type: 'image',
+      preview: img.thumbs.large, // High-quality compressed preview for grid
+      download: img.path,        // Direct raw 4K/HD link for download button
+      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
+    }));
+  } catch (error) {
+    console.error("Wallhaven fetch failed:", error);
+    return [];
+  }
+}
 
+async function getGiphyVideos(query) {
+  // Safe fallback if the search query is generic, similar to your Pexels video logic
+  const q = (query === 'popular' || query === 'all') ? 'anime loop' : query;
+  
+  // Note: Replace KEYS.giphy with your variable name if you store it in your KEYS object
+  const GIPHY_KEY = KEYS.giphy || 'YOUR_FREE_GIPHY_API_KEY'; 
+  
+  try {
+    const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=15`);
+    const data = await res.json();
+    
+    return (data.data || []).map(vid => ({
+      type: 'video', // Matches your video layout logic
+      preview: vid.images.fixed_height.url, // Smoothly looping GIF for the grid preview
+      download: vid.images.original.url,     // Full-res direct file link
+      author: vid.username || 'Giphy Creator'
+    }));
+  } catch (error) {
+    console.error("Giphy fetch failed:", error);
+    return [];
+  }
+}
 // --- 4. API FETCHERS (VIDEOS / LIVE) ---
 
 async function getPexelsVideos(query) {
