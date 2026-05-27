@@ -975,15 +975,7 @@ const manualPhotos = [
     tags: ['anime', 'one piece', 'zoro', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
-  {
-    type: 'image',
-    preview: 'images/587708195_17871438477471631_1205372378149614273_n.jpg',
-    download: 'images/587708195_17871438477471631_1205372378149614273_n.jpg',
-    aspect: 'pc',
-    author: 'Akshay',
-    tags: ['anime', 'one piece', 'zoro', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
-    isTrending: true
-  },
+  
   {
     type: 'image',
     preview: 'images/589785896_17871438459471631_2723303519840437175_n.jpg',
@@ -993,15 +985,7 @@ const manualPhotos = [
     tags: ['anime', 'one piece', 'zoro', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
-  {
-    type: 'image',
-    preview: 'images/587846301_17871438381471631_2807013914685580501_n.jpg',
-    download: 'images/587846301_17871438381471631_2807013914685580501_n.jpg',
-    aspect: 'pc',
-    author: 'Akshay',
-    tags: ['anime', 'one piece', 'zoro', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
-    isTrending: true
-  },
+  
   {
     type: 'image',
     preview: 'images/598673881_17871438468471631_105703393159937968_n.jpg',
