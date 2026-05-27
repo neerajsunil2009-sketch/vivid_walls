@@ -1379,6 +1379,9 @@ const orientation = isMobile ? 'portrait' : 'landscape';
 const pixabayOrientation = isMobile ? 'vertical' : 'horizontal';
 
 // --- 2. THE MAIN ENGINE ---
+// ==========================================
+// 2. THE MAIN ENGINE
+// ==========================================
 async function fetchGallery(query = '') {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '<div class="loader">Curating Trending Walls...</div>';
@@ -1402,7 +1405,6 @@ async function fetchGallery(query = '') {
 
       displayItems(matchedManualVideos);
 
-      // Define variables outside the block so catch handles fallbacks safely
       let pVideos = [], pixVideos = [], gGiphy = [];
 
       try {
@@ -1419,7 +1421,7 @@ async function fetchGallery(query = '') {
 
         combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy];
       } catch (e) {
-        console.warn("Video APIs slow/failed, running mixed fallback recovery:", e); 
+        console.warn("Video APIs fallback routing active:", e); 
         combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy]; 
       }
 
@@ -1435,7 +1437,6 @@ async function fetchGallery(query = '') {
 
       displayItems(matchedManualPhotos);
 
-      // Define variables outside the block so catch handles fallbacks safely
       let u = [], p = [], pix = [], w = [];
 
       try {
@@ -1454,12 +1455,11 @@ async function fetchGallery(query = '') {
 
         combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...w];
       } catch (e) {
-        console.warn("Photo APIs slow/failed, running mixed fallback recovery:", e); 
+        console.warn("Photo APIs fallback routing active:", e); 
         combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...w]; 
       }
     }
 
-    // Final UI render compilation update
     if (combinedResults.length > 0) {
       displayItems(combinedResults);
     } else if (gallery.innerHTML.includes('loader')) {
@@ -1472,6 +1472,74 @@ async function fetchGallery(query = '') {
   }
 }
 
+// ==========================================
+// 3. API FETCHERS (PHOTOS)
+// ==========================================
+async function getUnsplashPhotos(query) {
+  try {
+    const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15&client_id=${KEYS.unsplash}`);
+    const data = await res.json();
+    return (data.results || []).map(img => ({
+      type: 'image',
+      preview: img.urls.regular,
+      download: img.urls.full,
+      author: img.user.name
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getPexelsPhotos(query) {
+  try {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15`, {
+      headers: { Authorization: KEYS.pexels }
+    });
+    const data = await res.json();
+    return (data.photos || []).map(img => ({
+      type: 'image',
+      preview: img.src.large,
+      download: img.src.original,
+      author: img.photographer
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getPixabayPhotos(query) {
+  try {
+    const res = await fetch(`https://pixabay.com/api/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&orientation=${pixabayOrientation}&per_page=15`);
+    const data = await res.json();
+    return (data.hits || []).map(img => ({
+      type: 'image',
+      preview: img.largeImageURL,
+      download: img.largeImageURL,
+      author: img.user
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getWallhavenPhotos(query) {
+  try {
+    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
+    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+    
+    const res = await fetch(proxyUrl);
+    const data = await res.json();
+    return (data.data || []).map(img => ({
+      type: 'image',
+      preview: img.thumbs.large, 
+      download: img.path,        
+      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
+    }));
+  } catch (error) {
+    return [];
+  }
+}
 async function getPexelsPhotos(query) {
     const res = await fetch(`https://api.pexels.com/v1/search?query=${query}&orientation=${orientation}&per_page=15`, {
         headers: { Authorization: KEYS.pexels }
