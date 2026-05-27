@@ -821,6 +821,60 @@ const manualPhotos = [
     author: 'Akshay',
     tags: ['car bike', 'bmw', 'sports car', 'cool', '4k wallpaper', 'all'],
     isTrending: false
+  },
+  {
+    type: 'image',
+    preview: 'images/706483386_17920149552357359_4833297422857452475_n.jpg',
+    download: 'images/706483386_17920149552357359_4833297422857452475_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706559653_17920149534357359_8174136154498249306_n.jpg',
+    download: 'images/706559653_17920149534357359_8174136154498249306_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'sukuna', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706568644_17920149525357359_3701538589347176786_n.jpg',
+    download: 'images/706568644_17920149525357359_3701538589347176786_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'mickey', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706581297_17920149516357359_5356546212842720972_n.jpg',
+    download: 'images/706581297_17920149516357359_5356546212842720972_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706919117_17920149543357359_5275027800366576917_n.jpg',
+    download: 'images/706919117_17920149543357359_5275027800366576917_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'gojo', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/707030087_17920149507357359_2621128272380771498_n.jpg',
+    download: 'images/707030087_17920149507357359_2621128272380771498_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['anime', 'jujutsu kaisen', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
   }
     
 ];
