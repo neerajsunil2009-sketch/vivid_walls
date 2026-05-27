@@ -1402,19 +1402,25 @@ async function fetchGallery(query = '') {
 
       displayItems(matchedManualVideos);
 
+      // Define variables outside the block so catch handles fallbacks safely
+      let pVideos = [], pixVideos = [], gGiphy = [];
+
       try {
         const apiQuery = (query === 'trending') ? 'popular' : query;
-        // Matches your exact video array destructuring exactly
-        const [pVideos, pixVideos, gGiphy] = await Promise.all([
-          getPexelsVideos(apiQuery),
-          getPixabayVideos(apiQuery),
-          getGiphyVideos(apiQuery)
+        const results = await Promise.all([
+          getPexelsVideos(apiQuery).catch(() => []),
+          getPixabayVideos(apiQuery).catch(() => []),
+          getGiphyVideos(apiQuery).catch(() => [])
         ]);
         
+        pVideos = results[0];
+        pixVideos = results[1];
+        gGiphy = results[2];
+
         combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy];
       } catch (e) {
-        console.warn("Video APIs slow/failed"); 
-        combinedResults = matchedManualVideos; 
+        console.warn("Video APIs slow/failed, running mixed fallback recovery:", e); 
+        combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy]; 
       }
 
     } else {
@@ -1429,25 +1435,31 @@ async function fetchGallery(query = '') {
 
       displayItems(matchedManualPhotos);
 
+      // Define variables outside the block so catch handles fallbacks safely
+      let u = [], p = [], pix = [], w = [];
+
       try {
         const apiQuery = (query === 'trending') ? 'nature aesthetic' : query;
-        // Corrected: 'w' variable is declared here to capture the Wallhaven data
-        const [u, p, pix, w] = await Promise.all([
-          getUnsplashPhotos(apiQuery),
-          getPexelsPhotos(apiQuery),
-          getPixabayPhotos(apiQuery),
-          getWallhavenPhotos(apiQuery)
+        const results = await Promise.all([
+          getUnsplashPhotos(apiQuery).catch(() => []),
+          getPexelsPhotos(apiQuery).catch(() => []),
+          getPixabayPhotos(apiQuery).catch(() => []),
+          getWallhavenPhotos(apiQuery).catch(() => [])
         ]);
 
-        // Unpacks '...w' smoothly into your master collection array
+        u = results[0];
+        p = results[1];
+        pix = results[2];
+        w = results[3];
+
         combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...w];
       } catch (e) {
-        console.warn("Photo APIs slow/failed"); 
-        combinedResults = matchedManualPhotos; 
+        console.warn("Photo APIs slow/failed, running mixed fallback recovery:", e); 
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...w]; 
       }
     }
 
-    // Final update with everything combined
+    // Final UI render compilation update
     if (combinedResults.length > 0) {
       displayItems(combinedResults);
     } else if (gallery.innerHTML.includes('loader')) {
@@ -1455,21 +1467,9 @@ async function fetchGallery(query = '') {
     }
 
   } catch (error) {
-    console.error("Critical error:", error);
+    console.error("Critical core error:", error);
     gallery.innerHTML = '<p class="error">System error. Please check your manual data arrays.</p>';
   }
-}
-// --- 3. API FETCHERS (PHOTOS) ---
-
-async function getUnsplashPhotos(query) {
-    const res = await fetch(`https://api.unsplash.com/search/photos?query=${query}&orientation=${orientation}&per_page=15&client_id=${KEYS.unsplash}`);
-    const data = await res.json();
-    return (data.results || []).map(img => ({
-        type: 'image',
-        preview: img.urls.regular,
-        download: img.urls.full,
-        author: img.user.name
-    }));
 }
 
 async function getPexelsPhotos(query) {
@@ -1497,21 +1497,24 @@ async function getPixabayPhotos(query) {
 }
 async function getWallhavenPhotos(query) {
   try {
-    // Wallhaven format requires 'widescreen' or 'portrait' instead of 'landscape'/'portrait'
     const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
     
-    const res = await fetch(`https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`);
+    // Encodes the target URL to pass safely through corsproxy.io
+    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+    
+    const res = await fetch(proxyUrl);
     const data = await res.json();
     
     return (data.data || []).map(img => ({
       type: 'image',
-      preview: img.thumbs.large, // High-quality compressed preview for grid
-      download: img.path,        // Direct raw 4K/HD link for download button
+      preview: img.thumbs.large, 
+      download: img.path,        
       author: img.uploader ? img.uploader.username : 'Wallhaven Community'
     }));
   } catch (error) {
     console.error("Wallhaven fetch failed:", error);
-    return [];
+    return []; // Crucial: return empty array so Promise.all doesn't crash the engine
   }
 }
 
