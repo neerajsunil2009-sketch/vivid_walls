@@ -875,6 +875,78 @@ const manualPhotos = [
     author: 'Akshay',
     tags: ['anime', 'jujutsu kaisen', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/706813417_179267435343185182000954884606088765_n.jpg',
+    download: 'images/706813417_179267435343185182000954884606088765_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'benten', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/707393502_179267434623185182680102197820893471_n.jpg',
+    download: 'images/707393502_179267434623185182680102197820893471_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'benten', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/707445642_179267434713185183575695097578858190_n.jpg',
+    download: 'images/707445642_179267434713185183575695097578858190_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'benten', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/707510212_179267434533185186175227409942330927_n.jpg',
+    download: 'images/707510212_179267434533185186175227409942330927_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'benten', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/707561175_179267434803185184442654822719767598_n.jpg',
+    download: 'images/707561175_179267434803185184442654822719767598_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'benten', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/708016306_179267434893185184269226150540340680_n.jpg',
+    download: 'images/708016306_179267434893185184269226150540340680_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'benten', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/708442208_179267434983185181589763069092152251_n.jpg',
+    download: 'images/708442208_179267434983185181589763069092152251_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'benten', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/708595496_179267434443185188928663010824992449_n.jpg',
+    download: 'images/708595496_179267434443185188928663010824992449_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'benten', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
   }
     
 ];
