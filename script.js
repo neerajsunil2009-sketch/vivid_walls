@@ -1030,6 +1030,14 @@ const manualPhotos = [
     author: 'Akshay',
     tags: ['cartoon', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
+  },{
+    type: 'image',
+    preview: 'images/673035383_17922152685320048_20340702592002570_n.jpg',
+    download: 'images/673035383_17922152685320048_20340702592002570_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'trending', 'pc wallpaper', 'aesthetic', 'girl'],
+    isTrending: true
   }
     
 ];
