@@ -1207,7 +1207,7 @@ const manualPhotos = [
     download: 'images/707963930_17937358710249826_6048087508372214936_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   }
     
