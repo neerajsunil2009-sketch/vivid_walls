@@ -1382,6 +1382,9 @@ const pixabayOrientation = isMobile ? 'vertical' : 'horizontal';
 // ==========================================
 // 2. THE MAIN ENGINE
 // ==========================================
+// ==========================================
+// 2. THE MAIN ENGINE
+// ==========================================
 async function fetchGallery(query = '') {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '<div class="loader">Curating Trending Walls...</div>';
@@ -1472,6 +1475,137 @@ async function fetchGallery(query = '') {
   }
 }
 
+// ==========================================
+// 3. API FETCHERS (PHOTOS)
+// ==========================================
+async function getUnsplashPhotos(query) {
+  try {
+    const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15&client_id=${KEYS.unsplash}`);
+    const data = await res.json();
+    return (data.results || []).map(img => ({
+      type: 'image',
+      preview: img.urls.regular,
+      download: img.urls.full,
+      author: img.user.name
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getPexelsPhotos(query) {
+  try {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15`, {
+      headers: { Authorization: KEYS.pexels }
+    });
+    const data = await res.json();
+    return (data.photos || []).map(img => ({
+      type: 'image',
+      preview: img.src.large,
+      download: img.src.original,
+      author: img.photographer
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getPixabayPhotos(query) {
+  try {
+    const res = await fetch(`https://pixabay.com/api/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&orientation=${pixabayOrientation}&per_page=15`);
+    const data = await res.json();
+    return (data.hits || []).map(img => ({
+      type: 'image',
+      preview: img.largeImageURL,
+      download: img.largeImageURL,
+      author: img.user
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getWallhavenPhotos(query) {
+  try {
+    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
+    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
+    
+    // Using AllOrigins Proxy Endpoint
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+    
+    const res = await fetch(proxyUrl);
+    if (!res.ok) return [];
+    
+    const wrapperData = await res.json();
+    // Safely parse out the contents string back into an object
+    const data = JSON.parse(wrapperData.contents);
+    
+    return (data.data || []).map(img => ({
+      type: 'image',
+      preview: img.thumbs.large, 
+      download: img.path,        
+      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
+    }));
+  } catch (error) {
+    console.error("Wallhaven proxy layout fetch failed:", error);
+    return [];
+  }
+}
+
+// ==========================================
+// 4. API FETCHERS (VIDEOS / LIVE)
+// ==========================================
+async function getPexelsVideos(query) {
+  try {
+    const q = (query === 'popular' || query === 'all') ? 'abstract loop' : query;
+    const res = await fetch(`https://api.pexels.com/videos/search?query=${encodeURIComponent(q)}&orientation=${orientation}&per_page=15`, {
+      headers: { Authorization: KEYS.pexels }
+    });
+    const data = await res.json();
+    return (data.videos || []).map(vid => ({
+      type: 'video',
+      preview: vid.video_files[0].link,
+      download: vid.video_files[0].link,
+      author: vid.user.name
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getPixabayVideos(query) {
+  try {
+    const q = (query === 'popular' || query === 'all') ? 'nature' : query;
+    const res = await fetch(`https://pixabay.com/api/videos/?key=${KEYS.pixabay}&q=${encodeURIComponent(q)}&orientation=${pixabayOrientation}&per_page=15`);
+    const data = await res.json();
+    return (data.hits || []).map(vid => ({
+      type: 'video',
+      preview: vid.videos.medium.url,
+      download: vid.videos.large.url,
+      author: vid.user
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getGiphyVideos(query) {
+  const q = (query === 'popular' || query === 'all') ? 'anime loop' : query;
+  const GIPHY_KEY = (typeof KEYS !== 'undefined' && KEYS.giphy) ? KEYS.giphy : 'dc6zaTOxFJmzC'; 
+
+  try {
+    const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=15`);
+    const data = await res.json();
+    return (data.data || []).map(vid => ({
+      type: 'video', 
+      preview: vid.images.fixed_height.url,
+      download: vid.images.original.url,     
+      author: vid.username || 'Giphy Creator'
+    }));
+  } catch (error) {
+    return [];
+  }
+}
 // ==========================================
 // 3. API FETCHERS (PHOTOS)
 // ==========================================
