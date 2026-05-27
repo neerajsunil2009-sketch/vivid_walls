@@ -1404,18 +1404,14 @@ async function fetchGallery(query = '') {
             displayItems(matchedManualVideos);
 
             try {
-      const apiQuery = (query === 'trending') ? 'popular' : query;
-      // 🔥 Add 'gGiphy' to capture the GIPHY results from Promise.all
-      const [pVideos, pixVideos, gGiphy] = await Promise.all([
-        getPexelsVideos(apiQuery),
-        getPixabayVideos(apiQuery),
-        getGiphyVideos(apiQuery) // 🔥 Execute GIPHY right here!
-      ]);
+                const apiQuery = (query === 'trending') ? 'popular' : query;
+                const [pVideos, pixVideos] = await Promise.all([
+                    getPexelsVideos(apiQuery),
+                    getPixabayVideos(apiQuery)
+                ]);
+                combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos];
+            } catch (e) { console.warn("Video APIs slow/failed"); combinedResults = matchedManualVideos; }
 
-      // 🔥 Spread '...gGiphy' into your combinedResults array
-      combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy];
-    } catch (e) {
-      console.warn("Video APIs slow/failed"); combinedResults = matchedManualVideos; }
         } else {
             // --- PHOTO LOGIC ---
             const matchedManualPhotos = (typeof manualPhotos !== 'undefined') ? manualPhotos.filter(photo => {
@@ -1435,9 +1431,9 @@ async function fetchGallery(query = '') {
                     getUnsplashPhotos(apiQuery),
                     getPexelsPhotos(apiQuery),
                     getPixabayPhotos(apiQuery),
-                    getWallhavenPhotos(apiQuery)
+                    
                 ]);
-                combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...w];
+                combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix,];
             } catch (e) { console.warn("Photo APIs slow/failed"); combinedResults = matchedManualPhotos; }
         }
 
