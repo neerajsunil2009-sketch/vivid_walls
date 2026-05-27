@@ -1135,7 +1135,7 @@ const manualPhotos = [
     download: 'images/564078654_17907928512249826_6116639868985099266_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car & bike', 'gtr', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'gtr', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
   {
@@ -1144,7 +1144,7 @@ const manualPhotos = [
     download: 'images/564084566_17907928515249826_5741429816216012430_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car & bike', 'gtr', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'gtr', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
   {
@@ -1153,7 +1153,7 @@ const manualPhotos = [
     download: 'images/564999087_17907928497249826_5107958419468349721_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car & bike', 'porsche gt3', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'porsche gt3', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
   {
@@ -1162,7 +1162,7 @@ const manualPhotos = [
     download: 'images/564084582_17907928524249826_4957265001454890996_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car & bike', 'mustang', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'mustang', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
   {
@@ -1171,7 +1171,7 @@ const manualPhotos = [
     download: 'images/563354395_17907928533249826_7779471007221877190_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car & bike', 'amg', 'benze', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'amg', 'benze', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
   {
@@ -1180,7 +1180,7 @@ const manualPhotos = [
     download: 'images/707270311_17937358719249826_8017689391253827838_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
   {
@@ -1189,7 +1189,7 @@ const manualPhotos = [
     download: 'images/706676283_17937358698249826_8356061626285703846_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
   {
@@ -1198,7 +1198,7 @@ const manualPhotos = [
     download: 'images/706875102_17937358701249826_6501411685497020410_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
-    tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    tags: ['car bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
   },
   {
