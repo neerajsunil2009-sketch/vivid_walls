@@ -1038,6 +1038,78 @@ const manualPhotos = [
     author: 'Akshay',
     tags: ['cartoon', 'trending', 'pc wallpaper', 'aesthetic', 'girl'],
     isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/637122868_17868242826560497_8734079697208900814_n.jpg',
+    download: 'images/637122868_17868242826560497_8734079697208900814_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['marvel', 'venom', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/632220172_17868242817560497_8065501061822404203_n.jpg',
+    download: 'images/632220172_17868242817560497_8065501061822404203_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['marvel', 'ironman', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/639563880_17868242808560497_7479193109621011917_n.jpg',
+    download: 'images/639563880_17868242808560497_7479193109621011917_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['marvel', 'loki', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/636708325_17868242763560497_2201588329036706940_n.jpg',
+    download: 'images/636708325_17868242763560497_2201588329036706940_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['marvel', 'wanda', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/636968820_17868242790560497_6676701453313660197_n.jpg',
+    download: 'images/636968820_17868242790560497_6676701453313660197_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['marvel', 'spiderman', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/639492300_17868242799560497_177610005887386351_n.jpg',
+    download: 'images/639492300_17868242799560497_177610005887386351_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['marvel', 'black widow', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/638868097_17868242787560497_2547003390956588558_n.jpg',
+    download: 'images/638868097_17868242787560497_2547003390956588558_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['marvel', 'thor', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/639770230_17868242772560497_4361593699308685266_n.jpg',
+    download: 'images/639770230_17868242772560497_4361593699308685266_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['marvel', 'captain america', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
   }
     
 ];
