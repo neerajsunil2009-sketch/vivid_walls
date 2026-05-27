@@ -2,7 +2,7 @@ const KEYS = {
     unsplash: 'yr1wxgn6oZ2XeIZcbZwBPpsImtrY6Ah8ZIn0DJ6cqiE',
     pexels: 'o1X7PyrGxEiaDgdyxq6j2ewlQsU8wBGg6ZIENUBThf4yudD59NiE2QUc',
     pixabay: '55660755-90f69456cc2ac320284d8b998',
-    giphy:'uoq7COESx8HCtVEt6wx4FwPpXuwKb6WM',
+    giphy:'uoq7COESx8HCtVEt6wx4FwPpXuwKb6WM'
 };
 const manualPhotos = [
     {
@@ -1380,74 +1380,84 @@ const pixabayOrientation = isMobile ? 'vertical' : 'horizontal';
 
 // --- 2. THE MAIN ENGINE ---
 async function fetchGallery(query = '') {
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = '<div class="loader">Curating Trending Walls...</div>';
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '<div class="loader">Curating Trending Walls...</div>';
 
-    const lowerQuery = query.toLowerCase();
-    const userDevice = window.innerWidth < 768 ? 'mobile' : 'pc';
-    const mode = (typeof currentMain !== 'undefined') ? currentMain : 'home';
+  const lowerQuery = query.toLowerCase();
+  const userDevice = window.innerWidth < 768 ? 'mobile' : 'pc';
+  const mode = (typeof currentMain !== 'undefined') ? currentMain : 'home';
 
-    try {
-        let combinedResults = [];
+  try {
+    let combinedResults = [];
 
-        if (mode === 'live') {
-            // --- LIVE VIDEO LOGIC ---
-            const matchedManualVideos = (typeof manualVideos !== 'undefined') ? manualVideos.filter(vid => {
-                const deviceMatch = vid.aspect === 'all' || vid.aspect === userDevice;
-                if (!deviceMatch) return false;
-                if (query === 'trending') return vid.isTrending;
-                if (!query || query === 'popular' || query === '') return true;
-                return vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
-            }) : [];
+    if (mode === 'live') {
+      // --- LIVE VIDEO LOGIC ---
+      const matchedManualVideos = (typeof manualVideos !== 'undefined') ? manualVideos.filter(vid => {
+        const deviceMatch = vid.aspect === 'all' || vid.aspect === userDevice;
+        if (!deviceMatch) return false;
+        if (query === 'trending') return vid.isTrending;
+        if (!query || query === 'popular' || query === '') return true;
+        return vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+      }) : [];
 
-            // PRIORITY 1: Show your edits immediately
-            displayItems(matchedManualVideos);
+      displayItems(matchedManualVideos);
 
-            try {
-                const apiQuery = (query === 'trending') ? 'popular' : query;
-                const [pVideos, pixVideos] = await Promise.all([
-                    getPexelsVideos(apiQuery),
-                    getPixabayVideos(apiQuery)
-                ]);
-                combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos];
-            } catch (e) { console.warn("Video APIs slow/failed"); combinedResults = matchedManualVideos; }
+      try {
+        const apiQuery = (query === 'trending') ? 'popular' : query;
+        // Matches your exact video array destructuring exactly
+        const [pVideos, pixVideos, gGiphy] = await Promise.all([
+          getPexelsVideos(apiQuery),
+          getPixabayVideos(apiQuery),
+          getGiphyVideos(apiQuery)
+        ]);
+        
+        combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy];
+      } catch (e) {
+        console.warn("Video APIs slow/failed"); 
+        combinedResults = matchedManualVideos; 
+      }
 
-        } else {
-            // --- PHOTO LOGIC ---
-            const matchedManualPhotos = (typeof manualPhotos !== 'undefined') ? manualPhotos.filter(photo => {
-                const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
-                if (!deviceMatch) return false;
-                if (query === 'trending') return photo.isTrending;
-                if (!query || query === 'popular' || query === '') return true;
-                return photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
-            }) : [];
+    } else {
+      // --- PHOTO LOGIC ---
+      const matchedManualPhotos = (typeof manualPhotos !== 'undefined') ? manualPhotos.filter(photo => {
+        const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
+        if (!deviceMatch) return false;
+        if (query === 'trending') return photo.isTrending;
+        if (!query || query === 'popular' || query === '') return true;
+        return photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+      }) : [];
 
-            // PRIORITY 1: Show your photos immediately
-            displayItems(matchedManualPhotos);
+      displayItems(matchedManualPhotos);
 
-            try {
-                const apiQuery = (query === 'trending') ? 'nature aesthetic' : query;
-                const [u, p, pix] = await Promise.all([
-                    getUnsplashPhotos(apiQuery),
-                    getPexelsPhotos(apiQuery),
-                    getPixabayPhotos(apiQuery),
-                    
-                ]);
-                combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix,];
-            } catch (e) { console.warn("Photo APIs slow/failed"); combinedResults = matchedManualPhotos; }
-        }
+      try {
+        const apiQuery = (query === 'trending') ? 'nature aesthetic' : query;
+        // Corrected: 'w' variable is declared here to capture the Wallhaven data
+        const [u, p, pix, w] = await Promise.all([
+          getUnsplashPhotos(apiQuery),
+          getPexelsPhotos(apiQuery),
+          getPixabayPhotos(apiQuery),
+          getWallhavenPhotos(apiQuery)
+        ]);
 
-        // Final update with everything combined
-        if (combinedResults.length > 0) {
-            displayItems(combinedResults);
-        } else if (gallery.innerHTML.includes('loader')) {
-            gallery.innerHTML = '<p class="no-results">No wallpapers found.</p>';
-        }
-
-    } catch (error) {
-        console.error("Critical error:", error);
-        gallery.innerHTML = '<p class="error">System error. Please check your manual data arrays.</p>';
+        // Unpacks '...w' smoothly into your master collection array
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...w];
+      } catch (e) {
+        console.warn("Photo APIs slow/failed"); 
+        combinedResults = matchedManualPhotos; 
+      }
     }
+
+    // Final update with everything combined
+    if (combinedResults.length > 0) {
+      displayItems(combinedResults);
+    } else if (gallery.innerHTML.includes('loader')) {
+      gallery.innerHTML = '<p class="no-results">No wallpapers found.</p>';
+    }
+
+  } catch (error) {
+    console.error("Critical error:", error);
+    gallery.innerHTML = '<p class="error">System error. Please check your manual data arrays.</p>';
+  }
 }
 // --- 3. API FETCHERS (PHOTOS) ---
 
