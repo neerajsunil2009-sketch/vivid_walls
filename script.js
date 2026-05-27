@@ -1110,7 +1110,16 @@ const manualPhotos = [
     author: 'Akshay',
     tags: ['marvel', 'captain america', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
-  }
+  },
+  {
+  type: 'image',
+  preview: 'images/573921626_17898742434320048_822451625288474627_n.jpg',
+  download: 'images/573921626_17898742434320048_822451625288474627_n.jpg',
+  aspect: 'pc',
+  author: 'Akshay',
+  tags: ['anime', 'demon slayer', 'trending', '4k wallpaper', 'all'],
+  isTrending: true
+}
     
 ];
 const manualVideos = [
