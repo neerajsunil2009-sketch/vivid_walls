@@ -1391,6 +1391,9 @@ const pixabayOrientation = isMobile ? 'vertical' : 'horizontal';
 // ==========================================
 // 2. THE MAIN ENGINE
 // ==========================================
+// ==========================================
+// 2. THE MAIN ENGINE
+// ==========================================
 async function fetchGallery(query = '') {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '<div class="loader">Curating Trending Walls...</div>';
@@ -1534,11 +1537,9 @@ async function getPixabayPhotos(query) {
 async function getWallhavenPhotos(query) {
   try {
     const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
-    
-    // 1. Build standard api target destination
     const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
     
-    // 2. Wrap it with AllOrigins + a cache-busting timestamp to break old corsproxy remnants
+    // Clean transition to AllOrigins proxy endpoint (No domain bans!)
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=${Date.now()}`;
     
     const res = await fetch(proxyUrl);
@@ -1547,159 +1548,6 @@ async function getWallhavenPhotos(query) {
     const wrapperData = await res.json();
     if (!wrapperData.contents) return [];
     
-    const data = JSON.parse(wrapperData.contents);
-    
-    return (data.data || []).map(img => ({
-      type: 'image',
-      preview: img.thumbs.large, 
-      download: img.path,        
-      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
-    }));
-  } catch (error) {
-    console.error("Wallhaven AllOrigins handler failed:", error);
-    return [];
-  }
-}
-// ==========================================
-// 3. API FETCHERS (PHOTOS)
-// ==========================================
-async function getUnsplashPhotos(query) {
-  try {
-    const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15&client_id=${KEYS.unsplash}`);
-    const data = await res.json();
-    return (data.results || []).map(img => ({
-      type: 'image',
-      preview: img.urls.regular,
-      download: img.urls.full,
-      author: img.user.name
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getPexelsPhotos(query) {
-  try {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15`, {
-      headers: { Authorization: KEYS.pexels }
-    });
-    const data = await res.json();
-    return (data.photos || []).map(img => ({
-      type: 'image',
-      preview: img.src.large,
-      download: img.src.original,
-      author: img.photographer
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getPixabayPhotos(query) {
-  try {
-    const res = await fetch(`https://pixabay.com/api/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&orientation=${pixabayOrientation}&per_page=15`);
-    const data = await res.json();
-    return (data.hits || []).map(img => ({
-      type: 'image',
-      preview: img.largeImageURL,
-      download: img.largeImageURL,
-      author: img.user
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getWallhavenPhotos(query) {
-  try {
-    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
-    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
-    
-    // 🔥 Clean transition to AllOrigins proxy endpoint (No production domain bans!)
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-    
-    const res = await fetch(proxyUrl);
-    if (!res.ok) return [];
-    
-    const wrapperData = await res.json();
-    // Parses out the wrapped contents raw string payload smoothly back into a clean JSON layout object
-    const data = JSON.parse(wrapperData.contents);
-    
-    return (data.data || []).map(img => ({
-      type: 'image',
-      preview: img.thumbs.large, 
-      download: img.path,        
-      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
-    }));
-  } catch (error) {
-    console.error("Wallhaven proxy layout fetch failed:", error);
-    return [];
-  }
-}
-
-// ==========================================
-// 3. API FETCHERS (PHOTOS)
-// ==========================================
-async function getUnsplashPhotos(query) {
-  try {
-    const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15&client_id=${KEYS.unsplash}`);
-    const data = await res.json();
-    return (data.results || []).map(img => ({
-      type: 'image',
-      preview: img.urls.regular,
-      download: img.urls.full,
-      author: img.user.name
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getPexelsPhotos(query) {
-  try {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15`, {
-      headers: { Authorization: KEYS.pexels }
-    });
-    const data = await res.json();
-    return (data.photos || []).map(img => ({
-      type: 'image',
-      preview: img.src.large,
-      download: img.src.original,
-      author: img.photographer
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getPixabayPhotos(query) {
-  try {
-    const res = await fetch(`https://pixabay.com/api/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&orientation=${pixabayOrientation}&per_page=15`);
-    const data = await res.json();
-    return (data.hits || []).map(img => ({
-      type: 'image',
-      preview: img.largeImageURL,
-      download: img.largeImageURL,
-      author: img.user
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getWallhavenPhotos(query) {
-  try {
-    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
-    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
-    
-    // Using AllOrigins Proxy Endpoint
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-    
-    const res = await fetch(proxyUrl);
-    if (!res.ok) return [];
-    
-    const wrapperData = await res.json();
-    // Safely parse out the contents string back into an object
     const data = JSON.parse(wrapperData.contents);
     
     return (data.data || []).map(img => ({
@@ -1765,153 +1613,6 @@ async function getGiphyVideos(query) {
       author: vid.username || 'Giphy Creator'
     }));
   } catch (error) {
-    return [];
-  }
-}
-// ==========================================
-// 3. API FETCHERS (PHOTOS)
-// ==========================================
-async function getUnsplashPhotos(query) {
-  try {
-    const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15&client_id=${KEYS.unsplash}`);
-    const data = await res.json();
-    return (data.results || []).map(img => ({
-      type: 'image',
-      preview: img.urls.regular,
-      download: img.urls.full,
-      author: img.user.name
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getPexelsPhotos(query) {
-  try {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15`, {
-      headers: { Authorization: KEYS.pexels }
-    });
-    const data = await res.json();
-    return (data.photos || []).map(img => ({
-      type: 'image',
-      preview: img.src.large,
-      download: img.src.original,
-      author: img.photographer
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getPixabayPhotos(query) {
-  try {
-    const res = await fetch(`https://pixabay.com/api/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&orientation=${pixabayOrientation}&per_page=15`);
-    const data = await res.json();
-    return (data.hits || []).map(img => ({
-      type: 'image',
-      preview: img.largeImageURL,
-      download: img.largeImageURL,
-      author: img.user
-    }));
-  } catch (error) {
-    return [];
-  }
-}
-
-async function getWallhavenPhotos(query) {
-  try {
-    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
-    
-    // The exact API endpoint for Wallhaven
-    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
-    
-    // 🔥 Swapped to AllOrigins proxy to completely bypass the 403 restriction!
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-    
-    const res = await fetch(proxyUrl);
-    if (!res.ok) throw new Error("Proxy response failed");
-    
-    const wrapperData = await res.json();
-    
-    // AllOrigins wraps the response inside a .contents string, so we parse it back to JSON
-    const data = JSON.parse(wrapperData.contents);
-    
-    return (data.data || []).map(img => ({
-      type: 'image',
-      preview: img.thumbs.large, 
-      download: img.path,        
-      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
-    }));
-  } catch (error) {
-    console.error("Wallhaven proxy route failed:", error);
-    return []; // Keeps your engine safe and moving if it goes down!
-  }
-}
-async function getPexelsPhotos(query) {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${query}&orientation=${orientation}&per_page=15`, {
-        headers: { Authorization: KEYS.pexels }
-    });
-    const data = await res.json();
-    return (data.photos || []).map(img => ({
-        type: 'image',
-        preview: img.src.large,
-        download: img.src.original,
-        author: img.photographer
-    }));
-}
-
-async function getPixabayPhotos(query) {
-    const res = await fetch(`https://pixabay.com/api/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&orientation=${pixabayOrientation}&per_page=15`);
-    const data = await res.json();
-    return (data.hits || []).map(img => ({
-        type: 'image',
-        preview: img.largeImageURL,
-        download: img.largeImageURL,
-        author: img.user
-    }));
-}
-async function getWallhavenPhotos(query) {
-  try {
-    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
-    
-    // Encodes the target URL to pass safely through corsproxy.io
-    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
-    
-    const res = await fetch(proxyUrl);
-    const data = await res.json();
-    
-    return (data.data || []).map(img => ({
-      type: 'image',
-      preview: img.thumbs.large, 
-      download: img.path,        
-      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
-    }));
-  } catch (error) {
-    console.error("Wallhaven fetch failed:", error);
-    return []; // Crucial: return empty array so Promise.all doesn't crash the engine
-  }
-}
-
-async function getGiphyVideos(query) {
-  // Safe fallback if the search query is generic
-  const q = (query === 'popular' || query === 'all') ? 'anime loop' : query;
-  
-  // Uses a stable public key if KEYS.giphy isn't populated
-  const GIPHY_KEY = (typeof KEYS !== 'undefined' && KEYS.giphy) ? KEYS.giphy : 'dc6zaTOxFJmzC'; 
-
-  try {
-    const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=15`);
-    const data = await res.json();
-    
-    return (data.data || []).map(vid => ({
-      type: 'video', 
-      preview: vid.images.fixed_height.url, // Smoothly looping GIF for the grid
-      download: vid.images.original.url,     // Full-res link
-      author: vid.username || 'Giphy Creator'
-    }));
-  } catch (error) {
-    console.error("Giphy fetch failed:", error);
     return [];
   }
 }
