@@ -1388,6 +1388,9 @@ const pixabayOrientation = isMobile ? 'vertical' : 'horizontal';
 // ==========================================
 // 2. THE MAIN ENGINE
 // ==========================================
+// ==========================================
+// 2. THE MAIN ENGINE
+// ==========================================
 async function fetchGallery(query = '') {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '<div class="loader">Curating Trending Walls...</div>';
@@ -1478,6 +1481,85 @@ async function fetchGallery(query = '') {
   }
 }
 
+// ==========================================
+// 3. API FETCHERS (PHOTOS)
+// ==========================================
+async function getUnsplashPhotos(query) {
+  try {
+    const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15&client_id=${KEYS.unsplash}`);
+    const data = await res.json();
+    return (data.results || []).map(img => ({
+      type: 'image',
+      preview: img.urls.regular,
+      download: img.urls.full,
+      author: img.user.name
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getPexelsPhotos(query) {
+  try {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15`, {
+      headers: { Authorization: KEYS.pexels }
+    });
+    const data = await res.json();
+    return (data.photos || []).map(img => ({
+      type: 'image',
+      preview: img.src.large,
+      download: img.src.original,
+      author: img.photographer
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getPixabayPhotos(query) {
+  try {
+    const res = await fetch(`https://pixabay.com/api/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&orientation=${pixabayOrientation}&per_page=15`);
+    const data = await res.json();
+    return (data.hits || []).map(img => ({
+      type: 'image',
+      preview: img.largeImageURL,
+      download: img.largeImageURL,
+      author: img.user
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getWallhavenPhotos(query) {
+  try {
+    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
+    
+    // 1. Build standard api target destination
+    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
+    
+    // 2. Wrap it with AllOrigins + a cache-busting timestamp to break old corsproxy remnants
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=${Date.now()}`;
+    
+    const res = await fetch(proxyUrl);
+    if (!res.ok) return [];
+    
+    const wrapperData = await res.json();
+    if (!wrapperData.contents) return [];
+    
+    const data = JSON.parse(wrapperData.contents);
+    
+    return (data.data || []).map(img => ({
+      type: 'image',
+      preview: img.thumbs.large, 
+      download: img.path,        
+      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
+    }));
+  } catch (error) {
+    console.error("Wallhaven AllOrigins handler failed:", error);
+    return [];
+  }
+}
 // ==========================================
 // 3. API FETCHERS (PHOTOS)
 // ==========================================
