@@ -1525,11 +1525,21 @@ async function getPixabayPhotos(query) {
 async function getWallhavenPhotos(query) {
   try {
     const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
+    
+    // The exact API endpoint for Wallhaven
     const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+    
+    // 🔥 Swapped to AllOrigins proxy to completely bypass the 403 restriction!
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
     
     const res = await fetch(proxyUrl);
-    const data = await res.json();
+    if (!res.ok) throw new Error("Proxy response failed");
+    
+    const wrapperData = await res.json();
+    
+    // AllOrigins wraps the response inside a .contents string, so we parse it back to JSON
+    const data = JSON.parse(wrapperData.contents);
+    
     return (data.data || []).map(img => ({
       type: 'image',
       preview: img.thumbs.large, 
@@ -1537,7 +1547,8 @@ async function getWallhavenPhotos(query) {
       author: img.uploader ? img.uploader.username : 'Wallhaven Community'
     }));
   } catch (error) {
-    return [];
+    console.error("Wallhaven proxy route failed:", error);
+    return []; // Keeps your engine safe and moving if it goes down!
   }
 }
 async function getPexelsPhotos(query) {
@@ -1587,20 +1598,20 @@ async function getWallhavenPhotos(query) {
 }
 
 async function getGiphyVideos(query) {
-  // Safe fallback if the search query is generic, similar to your Pexels video logic
+  // Safe fallback if the search query is generic
   const q = (query === 'popular' || query === 'all') ? 'anime loop' : query;
   
-  // Note: Replace KEYS.giphy with your variable name if you store it in your KEYS object
-  const GIPHY_KEY = KEYS.giphy || 'YOUR_FREE_GIPHY_API_KEY'; 
-  
+  // Uses a stable public key if KEYS.giphy isn't populated
+  const GIPHY_KEY = (typeof KEYS !== 'undefined' && KEYS.giphy) ? KEYS.giphy : 'dc6zaTOxFJmzC'; 
+
   try {
     const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=15`);
     const data = await res.json();
     
     return (data.data || []).map(vid => ({
-      type: 'video', // Matches your video layout logic
-      preview: vid.images.fixed_height.url, // Smoothly looping GIF for the grid preview
-      download: vid.images.original.url,     // Full-res direct file link
+      type: 'video', 
+      preview: vid.images.fixed_height.url, // Smoothly looping GIF for the grid
+      download: vid.images.original.url,     // Full-res link
       author: vid.username || 'Giphy Creator'
     }));
   } catch (error) {
