@@ -1119,6 +1119,15 @@ const manualPhotos = [
   author: 'Akshay',
   tags: ['anime', 'demon slayer', 'trending', '4k wallpaper', 'all'],
   isTrending: true
+},
+{
+  type: 'image',
+  preview: 'images/541610869_17892277215320048_7322779545698044856_n.jpg',
+  download: 'images/541610869_17892277215320048_7322779545698044856_n.jpg',
+  aspect: 'pc',
+  author: 'Akshay',
+  tags: ['anime', 'demon slayer', 'trending', '4k wallpaper', 'all'],
+  isTrending: true
 }
     
 ];
