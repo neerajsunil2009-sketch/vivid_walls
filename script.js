@@ -1176,8 +1176,8 @@ const manualPhotos = [
   },
   {
     type: 'image',
-    preview: 'images/564084566_17907928515249826_5741429816216012430_n.jpg',
-    download: 'images/564084566_17907928515249826_5741429816216012430_n.jpg',
+    preview: 'images/707270311_17937358719249826_8017689391253827838_n.jpg',
+    download: 'images/707270311_17937358719249826_8017689391253827838_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
     tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
@@ -1185,8 +1185,8 @@ const manualPhotos = [
   },
   {
     type: 'image',
-    preview: 'images/564999087_17907928497249826_5107958419468349721_n.jpg',
-    download: 'images/564999087_17907928497249826_5107958419468349721_n.jpg',
+    preview: 'images/706676283_17937358698249826_8356061626285703846_n.jpg',
+    download: 'images/706676283_17937358698249826_8356061626285703846_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
     tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
@@ -1194,8 +1194,8 @@ const manualPhotos = [
   },
   {
     type: 'image',
-    preview: 'images/564084582_17907928524249826_4957265001454890996_n.jpg',
-    download: 'images/564084582_17907928524249826_4957265001454890996_n.jpg',
+    preview: 'images/706875102_17937358701249826_6501411685497020410_n.jpg',
+    download: 'images/706875102_17937358701249826_6501411685497020410_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
     tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
@@ -1203,17 +1203,8 @@ const manualPhotos = [
   },
   {
     type: 'image',
-    preview: 'images/563354395_17907928533249826_7779471007221877190_n.jpg',
-    download: 'images/563354395_17907928533249826_7779471007221877190_n.jpg',
-    aspect: 'pc',
-    author: 'Akshay',
-    tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
-    isTrending: true
-  },
-  {
-    type: 'image',
-    preview: 'images/564078654_17907928512249826_6116639868985099266_n.jpg',
-    download: 'images/564078654_17907928512249826_6116639868985099266_n.jpg',
+    preview: 'images/707963930_17937358710249826_6048087508372214936_n.jpg',
+    download: 'images/707963930_17937358710249826_6048087508372214936_n.jpg',
     aspect: 'pc',
     author: 'Akshay',
     tags: ['car and bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
