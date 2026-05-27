@@ -994,6 +994,42 @@ const manualPhotos = [
     author: 'Akshay',
     tags: ['anime', 'one piece', 'zoro', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/586804508_17903930760285337_1902815889450813405_n.jpg',
+    download: 'images/586804508_17903930760285337_1902815889450813405_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/587268262_17903930787285337_6400905904047300015_n.jpg',
+    download: 'images/587268262_17903930787285337_6400905904047300015_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'kungfu panda', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/584843937_17903930784285337_4204925817665626538_n.jpg',
+    download: 'images/584843937_17903930784285337_4204925817665626538_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/587017726_17903930775285337_6195788346546355336_n.jpg',
+    download: 'images/587017726_17903930775285337_6195788346546355336_n.jpg',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['cartoon', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
   }
     
 ];
