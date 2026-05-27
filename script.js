@@ -1436,8 +1436,7 @@ async function fetchGallery(query = '') {
         console.warn("Video APIs fallback routing active:", e); 
         combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy]; 
       }
-
-    } else {
+} else {
       // --- PHOTO LOGIC ---
       const matchedManualPhotos = (typeof manualPhotos !== 'undefined') ? manualPhotos.filter(photo => {
         const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
@@ -1447,28 +1446,42 @@ async function fetchGallery(query = '') {
         return photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
       }) : [];
 
+      // Step 1: Immediately show manual assets
       displayItems(matchedManualPhotos);
 
-      let u = [], p = [], pix = [], w = [];
+      let u = [], p = [], pix = [];
 
       try {
         const apiQuery = (query === 'trending') ? 'nature aesthetic' : query;
+        
+        // Step 2: ONLY wait for the fast APIs that don't use a proxy
         const results = await Promise.all([
           getUnsplashPhotos(apiQuery).catch(() => []),
           getPexelsPhotos(apiQuery).catch(() => []),
-          getPixabayPhotos(apiQuery).catch(() => []),
-          getWallhavenPhotos(apiQuery).catch(() => [])
+          getPixabayPhotos(apiQuery).catch(() => [])
         ]);
 
         u = results[0];
         p = results[1];
         pix = results[2];
-        w = results[3];
 
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...w];
+        // Combine and show the fast results immediately!
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix];
+        displayItems(combinedResults);
+
+        // Step 3: Fire & Forget Wallhaven in the background so it doesn't block the page load!
+        getWallhavenPhotos(apiQuery).then(w => {
+          if (w && w.length > 0) {
+            // Append Wallhaven images to the grid seamlessly when they arrive
+            combinedResults = [...combinedResults, ...w];
+            displayItems(combinedResults);
+          }
+        }).catch(err => console.warn("Background Wallhaven loading skipped:", err));
+
       } catch (e) {
         console.warn("Photo APIs fallback routing active:", e); 
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...w]; 
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix]; 
+        displayItems(combinedResults);
       }
     }
 
