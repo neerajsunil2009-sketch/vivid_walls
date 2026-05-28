@@ -1,6 +1,6 @@
 // Initialize Supabase Connection
 const SUPABASE_URL = 'https://hfimscpqwflrbairzjfv.supabase.co'; // Your exact project URL!
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; 
+const SUPABASE_ANON_KEY = 'https://hfimscpqwflrbairzjfv.supabase.co/rest/v1/community_wallpaper'; 
 
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // --- MODAL TOGGLE ---
