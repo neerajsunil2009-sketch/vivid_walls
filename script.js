@@ -1704,20 +1704,25 @@ function filter(query) {
 }
 
 // --- 6. SEARCH BAR LOGIC ---
+// --- 6. SEARCH BAR LOGIC ---
 const searchInput = document.getElementById('search-input');
 const searchBtn = document.getElementById('search-btn');
 
 function performSearch() {
-    const query = searchInput.value.trim();
-    if (query !== "") {
-        fetchGallery(query);
-    }
+  const query = searchInput.value.trim();
+  // Always trigger fetchGallery so empty searches reset the grid properly!
+  fetchGallery(query);
 }
 
-searchBtn.addEventListener('click', performSearch);
-searchInput.addEventListener('keypress', (e) => {
+if (searchBtn) {
+  searchBtn.addEventListener('click', performSearch);
+}
+
+if (searchInput) {
+  searchInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') performSearch();
-});
+  });
+}
 
 // Initial Load
 window.onload = () => {
