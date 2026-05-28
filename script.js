@@ -1456,17 +1456,18 @@ async function fetchGallery(query = '') {
         
         // Step 2: ONLY wait for the fast APIs that don't use a proxy
         const results = await Promise.all([
-          getUnsplashPhotos(apiQuery).catch(() => []),
-          getPexelsPhotos(apiQuery).catch(() => []),
-          getPixabayPhotos(apiQuery).catch(() => [])
-        ]);
-
+    getUnsplashPhotos(apiQuery).catch(() => []),
+    getPexelsPhotos(apiQuery).catch(() => []),
+    getPixabayPhotos(apiQuery).catch(() => []),
+    getWaifuPhotos(apiQuery).catch(() => [])
+]);
         u = results[0];
-        p = results[1];
-        pix = results[2];
+p = results[1];
+pix = results[2];
+waifu = results[3];
 
         // Combine and show the fast results immediately!
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix];
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...waifu];
         displayItems(combinedResults);
 
         // Step 3: Fire & Forget Wallhaven in the background so it doesn't block the page load!
@@ -1480,7 +1481,7 @@ async function fetchGallery(query = '') {
 
       } catch (e) {
         console.warn("Photo APIs fallback routing active:", e); 
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix]; 
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...waifu]; 
         displayItems(combinedResults);
       }
     }
@@ -1547,50 +1548,48 @@ async function getPixabayPhotos(query) {
   }
 }
 
-async function getWallhavenPhotos(query) {
+async function getWaifuPhotos(query) {
 
     try {
 
-        const response = await fetch(
-            `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&purity=100&sorting=toplist`
-        );
+        const results = [];
 
-        if (!response.ok) {
-            throw new Error('Wallhaven fetch failed');
+        for (let i = 0; i < 12; i++) {
+
+            const response = await fetch(
+                'https://api.waifu.pics/sfw/waifu'
+            );
+
+            const data = await response.json();
+
+            results.push({
+
+                type: 'image',
+
+                preview: data.url,
+
+                download: data.url,
+
+                aspect: 'mobile',
+
+                author: 'Waifu API',
+tags: [
+                    'anime',
+                    'waifu',
+                    'aesthetic',
+                    query
+                ],
+
+                isTrending: true
+            });
         }
 
-        const data = await response.json();
-
-        return data.data.map(item => ({
-
-            type: 'image',
-
-            preview: item.thumbs.large,
-
-            download: item.path,
-
-            aspect:
-                item.dimension_x > item.dimension_y
-                    ? 'pc'
-                    : 'mobile',
-
-            author:
-                item.uploader?.username || 'Wallhaven',
-
-            tags: [
-                query,
-                'wallhaven',
-                '4k wallpaper'
-            ],
-
-            isTrending: true
-
-        }));
+        return results;
 
     } catch (err) {
 
         console.error(
-            'Wallhaven fetch failed:',
+            'Waifu API failed:',
             err
         );
 
