@@ -1832,12 +1832,13 @@ async function handleWallpaperUpload(event) {
 
     if (dbError) throw dbError;
 
-    alert("🎉 Wallpaper successfully added to the global community library!");
+   alert("🎉 Wallpaper successfully added to the global community library!");
     const uploadForm = document.getElementById('wallpaper-upload-form');
     if (uploadForm) uploadForm.reset();
     toggleUploadModal(false);
     
-    if (typeof fetchGallery === 'function') fetchGallery(currentSearchQuery);
+    // 🌟 Clean fix: pass an empty string to refresh the home gallery
+    if (typeof fetchGallery === 'function') fetchGallery('');
 
   } catch (err) {
     console.error("Upload process crashed:", err);
