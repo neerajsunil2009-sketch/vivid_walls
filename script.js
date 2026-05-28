@@ -1861,6 +1861,7 @@ async function getCommunityWalls(query = '', activeMode = 'home') {
     
     if (error || !data) return [];
 
+    // Filter by mode (image vs video) safely
     const filteredData = data.filter(item => (item.type || 'image') === targetType);
     const lowerQuery = query.toLowerCase().trim();
     
@@ -1870,10 +1871,12 @@ async function getCommunityWalls(query = '', activeMode = 'home') {
       download: item.url,   
       author: item.author || 'Anonymous Creator',
       title: item.title || 'Community Design',
-      tags: item.tags ? item.tags.split(',').map(t => t.trim()) : []
+      // Ensure tags is always an array so it never crashes .some()
+      tags: item.tags ? item.tags.split(',').map(t => t.trim().toLowerCase()) : []
     }));
 
-    if (lowerQuery && lowerQuery !== 'trending' && lowerQuery !== 'popular') {
+    // If there's an active search query, filter the community results
+    if (lowerQuery && lowerQuery !== 'trending' && lowerQuery !== 'popular' && lowerQuery !== 'nature aesthetic') {
       return mappedWalls.filter(w => 
         w.title.toLowerCase().includes(lowerQuery) ||
         w.author.toLowerCase().includes(lowerQuery) ||
@@ -1883,6 +1886,7 @@ async function getCommunityWalls(query = '', activeMode = 'home') {
 
     return mappedWalls;
   } catch (e) {
+    console.error("Supabase search filter dropped:", e);
     return [];
   }
 }
