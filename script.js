@@ -1,3 +1,123 @@
+// Initialize Supabase Connection
+const SUPABASE_URL = 'https://hfimscpqwflrbairzjfv.supabase.co'; // Your exact project URL!
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; 
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// --- MODAL TOGGLE ---
+function toggleUploadModal(show) {
+  const modal = document.getElementById('upload-modal');
+  modal.style.display = show ? 'flex' : 'none';
+}
+
+// --- CORE UPLOAD CONTROLLER ---
+async function handleWallpaperUpload(event) {
+  event.preventDefault();
+  
+  const submitBtn = document.getElementById('submit-upload-btn');
+  const fileInput = document.getElementById('wall-file');
+  const title = document.getElementById('wall-title').value.trim();
+  const author = document.getElementById('wall-author').value.trim();
+  const type = document.getElementById('wall-type').value;
+  const rawTags = document.getElementById('wall-tags').value.trim();
+
+  if (!fileInput.files || fileInput.files.length === 0) {
+    alert("Please select an image or video file to upload!");
+    return;
+  }
+
+  const file = fileInput.files[0];
+  submitBtn.innerText = "Uploading to Cloud Storage...";
+  submitBtn.disabled = true;
+
+  try {
+    // 1. Generate clean unique filename identifier to prevent overwrite conflicts
+    const fileExtension = file.name.split('.').pop();
+    const uniqueFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExtension}`;
+    
+    // 2. Upload raw asset stream into your Supabase Public Storage bucket
+    const { data: storageData, error: storageError } = await supabase.storage
+      .from('wallpapers')
+      .upload(`uploads/${uniqueFileName}`, file);
+
+    if (storageError) throw storageError;
+
+    // 3. Extract the clean, unblocked public download url link 
+    const { data: urlData } = supabase.storage
+      .from('wallpapers')
+      .getPublicUrl(`uploads/${uniqueFileName}`);
+    
+    const assetPublicUrl = urlData.publicUrl;
+
+    // 4. Standardize text comma strings into a reliable matching array layout
+    const tagsArray = rawTags.split(',').map(t => t.trim().toLowerCase()).filter(t => t !== "");
+
+    // 5. Insert row directly into your public.community_wallpapers database table
+    const { error: dbError } = await supabase.from('community_wallpapers').insert([
+      {
+        title: title,
+        author: author,
+        type: type,
+        url: assetPublicUrl,
+        tags: tagsArray
+      }
+    ]);
+
+    if (dbError) throw dbError;
+
+    alert("🎉 Wallpaper successfully added to the global community library!");
+    document.getElementById('wallpaper-upload-form').reset();
+    toggleUploadModal(false);
+    
+    // Refresh display view so the fresh item populates instantly
+    if (typeof fetchGallery === 'function') fetchGallery(currentSearchQuery || '');
+
+  } catch (err) {
+    console.error("Community deployment execution failed:", err);
+    alert(`System error: ${err.message || "Could not complete configuration upload."}`);
+  } finally {
+    submitBtn.innerText = "Publish to Community";
+    submitBtn.disabled = false;
+  }
+}
+
+// --- DATABASE FETCH INTEGRATOR ---
+async function getCommunityWalls(query = '', activeMode = 'home') {
+  try {
+    const targetType = activeMode === 'live' ? 'video' : 'image';
+    let supabaseQuery = supabase.from('community_wallpapers').select('*').eq('type', targetType);
+    
+    const { data, error } = await supabaseQuery;
+    if (error) throw error;
+    if (!data || data.length === 0) return [];
+
+    const lowerQuery = query.toLowerCase().trim();
+    
+    // Map text table rows cleanly into your app's display card dictionary logic
+    const mappedWalls = data.map(item => ({
+      type: item.type,
+      preview: item.url,    
+      download: item.url,   
+      author: item.author || 'Anonymous User',
+      title: item.title,
+      // Pass tags downstream cleanly for client-side search overrides
+      tags: Array.isArray(item.tags) ? item.tags : []
+    }));
+
+    // If a search filter is active, look for matches in title, author, or tags array
+    if (lowerQuery && lowerQuery !== 'trending' && lowerQuery !== 'popular') {
+      return mappedWalls.filter(w => 
+        w.title.toLowerCase().includes(lowerQuery) ||
+        w.author.toLowerCase().includes(lowerQuery) ||
+        w.tags.some(tag => tag.includes(lowerQuery))
+      );
+    }
+
+    return mappedWalls;
+  } catch (e) {
+    console.warn("Could not retrieve community entries fallback active:", e);
+    return [];
+  }
+}
 const KEYS = {
     unsplash: 'yr1wxgn6oZ2XeIZcbZwBPpsImtrY6Ah8ZIn0DJ6cqiE',
     pexels: 'o1X7PyrGxEiaDgdyxq6j2ewlQsU8wBGg6ZIENUBThf4yudD59NiE2QUc',
@@ -1394,11 +1514,14 @@ const pixabayOrientation = isMobile ? 'vertical' : 'horizontal';
 // ==========================================
 // 2. THE MAIN ENGINE
 // ==========================================
+// ==========================================
+// 2. THE MAIN ENGINE
+// ==========================================
 async function fetchGallery(query = '') {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '<div class="loader">Curating Trending Walls...</div>';
 
-  const lowerQuery = query.toLowerCase();
+  const lowerQuery = query.toLowerCase().trim();
   const userDevice = window.innerWidth < 768 ? 'mobile' : 'pc';
   const mode = (typeof currentMain !== 'undefined') ? currentMain : 'home';
 
@@ -1417,26 +1540,32 @@ async function fetchGallery(query = '') {
 
       displayItems(matchedManualVideos);
 
-      let pVideos = [], pixVideos = [], gGiphy = [];
+      let pVideos = [], pixVideos = [], gGiphy = [], communityVideos = [];
 
       try {
         const apiQuery = (query === 'trending') ? 'popular' : query;
+        
+        // Parallel loading for video loops + community uploaded videos
         const results = await Promise.all([
           getPexelsVideos(apiQuery).catch(() => []),
           getPixabayVideos(apiQuery).catch(() => []),
-          getGiphyVideos(apiQuery).catch(() => [])
+          getGiphyVideos(apiQuery).catch(() => []),
+          getCommunityWalls(query, 'live').catch(() => [])
         ]);
         
         pVideos = results[0];
         pixVideos = results[1];
         gGiphy = results[2];
+        communityVideos = results[3];
 
-        combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy];
+        // Put community live walls right after manual ones
+        combinedResults = [...matchedManualVideos, ...communityVideos, ...pVideos, ...pixVideos, ...gGiphy];
       } catch (e) {
         console.warn("Video APIs fallback routing active:", e); 
         combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy]; 
       }
-} else {
+
+    } else {
       // --- PHOTO LOGIC ---
       const matchedManualPhotos = (typeof manualPhotos !== 'undefined') ? manualPhotos.filter(photo => {
         const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
@@ -1446,46 +1575,36 @@ async function fetchGallery(query = '') {
         return photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
       }) : [];
 
-      // Step 1: Immediately show manual assets
+      // Step 1: Immediately show hardcoded manual photos for instant feel
       displayItems(matchedManualPhotos);
 
-      let u = [], p = [], pix = [];
+      let u = [], p = [], pix = [], communityPhotos = [];
 
       try {
         const apiQuery = (query === 'trending') ? 'nature aesthetic' : query;
         
-        // Step 2: ONLY wait for the fast APIs that don't use a proxy
+        // Step 2: Concurrently fetch fast APIs + your Supabase Community data!
         const results = await Promise.all([
-    getUnsplashPhotos(apiQuery).catch(() => []),
-    getPexelsPhotos(apiQuery).catch(() => []),
-    getPixabayPhotos(apiQuery).catch(() => []),
-    
-]);
+          getUnsplashPhotos(apiQuery).catch(() => []),
+          getPexelsPhotos(apiQuery).catch(() => []),
+          getPixabayPhotos(apiQuery).catch(() => []),
+          getCommunityWalls(query, 'home').catch(() => []) // Cleanly handles user-uploaded walls
+        ]);
+
         u = results[0];
-p = results[1];
-pix = results[2];
-waifu = results[3];
+        p = results[1];
+        pix = results[2];
+        communityPhotos = results[3]; // Properly aligned index, no more waifu undefined errors!
 
-        // Combine and show the fast results immediately!
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix,];
-        displayItems(combinedResults);
-
-        // Step 3: Fire & Forget Wallhaven in the background so it doesn't block the page load!
-        getWallhavenPhotos(apiQuery).then(w => {
-          if (w && w.length > 0) {
-            // Append Wallhaven images to the grid seamlessly when they arrive
-            combinedResults = [...combinedResults, ...w];
-            displayItems(combinedResults);
-          }
-        }).catch(err => console.warn("Background Wallhaven loading skipped:", err));
-
+        // Step 3: Combine everything beautifully (Community items placed up front!)
+        combinedResults = [...matchedManualPhotos, ...communityPhotos, ...u, ...p, ...pix];
       } catch (e) {
         console.warn("Photo APIs fallback routing active:", e); 
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix,]; 
-        displayItems(combinedResults);
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix]; 
       }
     }
 
+    // Step 4: Update UI layout grid seamlessly
     if (combinedResults.length > 0) {
       displayItems(combinedResults);
     } else if (gallery.innerHTML.includes('loader')) {
@@ -1494,7 +1613,7 @@ waifu = results[3];
 
   } catch (error) {
     console.error("Critical core error:", error);
-    gallery.innerHTML = '<p class="error">System error. Please check your manual data arrays.</p>';
+    gallery.innerHTML = '<p class="error">System error. Please check your console settings.</p>';
   }
 }
 

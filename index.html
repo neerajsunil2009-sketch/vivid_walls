@@ -23,6 +23,7 @@
     <meta property="twitter:description" content="Premium 4K static and moving live wallpapers curated for mobile and desktop layout setups.">
 
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -76,6 +77,49 @@
         <a href="info.html?page=contact">Contact Us</a>
     </div>
 </footer>
+<button id="upload-trigger-btn" class="upload-fab" onclick="toggleUploadModal(true)">
+  <span>➕ Upload Wall</span>
+</button>
 
+<div id="upload-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Share Your Wallpaper</h3>
+      <button class="close-btn" onclick="toggleUploadModal(false)">&times;</button>
+    </div>
+    
+    <form id="wallpaper-upload-form" onsubmit="handleWallpaperUpload(event)">
+      <div class="form-group">
+        <label for="wall-title">Wallpaper Title</label>
+        <input type="text" id="wall-title" placeholder="e.g., Neon Cyberpunk City" required>
+      </div>
+
+      <div class="form-group">
+        <label for="wall-author">Creator Name</label>
+        <input type="text" id="wall-author" placeholder="Your name or handle" required>
+      </div>
+
+      <div class="form-group">
+        <label for="wall-type">Wallpaper Type</label>
+        <select id="wall-type" required>
+          <option value="image">Normal Wallpaper (Image)</option>
+          <option value="video">Live Wallpaper (Video Loop)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="wall-tags">Search Tags (Comma-separated)</label>
+        <input type="text" id="wall-tags" placeholder="e.g., anime, dark, neon, aesthetic" required>
+      </div>
+
+      <div class="form-group">
+        <label id="file-label" for="wall-file">Choose File (.png, .jpg, .mp4)</label>
+        <input type="file" id="wall-file" accept="image/*,video/*" required>
+      </div>
+
+      <button type="submit" id="submit-upload-btn" class="submit-btn">Publish to Community</button>
+    </form>
+  </div>
+</div>
 </body>
 </html>
