@@ -1548,33 +1548,55 @@ async function getPixabayPhotos(query) {
 }
 
 async function getWallhavenPhotos(query) {
-  try {
-    const wallhavenOrientation = orientation === 'landscape' ? 'widescreen' : 'portrait';
-    const targetUrl = `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&ratios=${wallhavenOrientation}&per_page=15`;
-    
-    // Clean transition to AllOrigins proxy endpoint (No domain bans!)
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=${Date.now()}`;
-    
-    const res = await fetch(proxyUrl);
-    if (!res.ok) return [];
-    
-    const wrapperData = await res.json();
-    if (!wrapperData.contents) return [];
-    
-    const data = JSON.parse(wrapperData.contents);
-    
-    return (data.data || []).map(img => ({
-      type: 'image',
-      preview: img.thumbs.large, 
-      download: img.path,        
-      author: img.uploader ? img.uploader.username : 'Wallhaven Community'
-    }));
-  } catch (error) {
-    console.error("Wallhaven proxy layout fetch failed:", error);
-    return [];
-  }
-}
 
+    try {
+
+        const response = await fetch(
+            `https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(query)}&purity=100&sorting=toplist`
+        );
+
+        if (!response.ok) {
+            throw new Error('Wallhaven fetch failed');
+        }
+
+        const data = await response.json();
+
+        return data.data.map(item => ({
+
+            type: 'image',
+
+            preview: item.thumbs.large,
+
+            download: item.path,
+
+            aspect:
+                item.dimension_x > item.dimension_y
+                    ? 'pc'
+                    : 'mobile',
+
+            author:
+                item.uploader?.username || 'Wallhaven',
+
+            tags: [
+                query,
+                'wallhaven',
+                '4k wallpaper'
+            ],
+
+            isTrending: true
+
+        }));
+
+    } catch (err) {
+
+        console.error(
+            'Wallhaven fetch failed:',
+            err
+        );
+
+        return [];
+    }
+}
 // ==========================================
 // 4. API FETCHERS (VIDEOS / LIVE)
 // ==========================================
