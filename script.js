@@ -3,7 +3,7 @@ const KEYS = {
     pexels: 'o1X7PyrGxEiaDgdyxq6j2ewlQsU8wBGg6ZIENUBThf4yudD59NiE2QUc',
     pixabay: '55660755-90f69456cc2ac320284d8b998',
     giphy:'uoq7COESx8HCtVEt6wx4FwPpXuwKb6WM'
-}
+};
 const SUPABASE_URL = 'https://hfimscpqwflrbairzjfv.supabase.co';
 // 🛑 PASTE YOUR MASSIVE PUBLIC ANON KEY (STARTING WITH eyJhbGci...) INSIDE THE QUOTES BELOW:
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmaW1zY3Bxd2ZscmJhaXJ6amZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NTA5OTMsImV4cCI6MjA5NTUyNjk5M30.N3IlIcmU5m6pG2ay1MEREN_UoeGgUbOGuAlJWFE0SgM';
@@ -1418,71 +1418,69 @@ async function fetchGallery(query = '') {
       const matchedManualVideos = (typeof manualVideos !== 'undefined') ? manualVideos.filter(vid => {
         const deviceMatch = vid.aspect === 'all' || vid.aspect === userDevice;
         if (!deviceMatch) return false;
-        if (query === 'trending') return vid.isTrending;
-        if (!query || query === 'popular' || query === '') return true;
-        return vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+        if (lowerQuery === 'trending') return vid.isTrending;
+        if (!lowerQuery || lowerQuery === 'popular') return true;
+        return vid.tags && vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
       }) : [];
 
       let pVideos = [], pixVideos = [], gGiphy = [], communityVideos = [];
 
       try {
-        const apiQuery = (query === 'trending') ? 'popular' : query;
+        // Use the actual search query if it exists, otherwise fall back to popular
+        const apiQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '') ? 'popular' : query;
         
-        // Fetch from external APIs AND your new Supabase database table
         const results = await Promise.all([
           (typeof getPexelsVideos === 'function') ? getPexelsVideos(apiQuery).catch(() => []) : [],
           (typeof getPixabayVideos === 'function') ? getPixabayVideos(apiQuery).catch(() => []) : [],
           (typeof getGiphyVideos === 'function') ? getGiphyVideos(apiQuery).catch(() => []) : [],
-          getCommunityWalls(query, 'live').catch(() => []) // 🌟 Supabase live wallpapers fetch!
+          (typeof getCommunityWalls === 'function') ? getCommunityWalls(query, 'live').catch(() => []) : []
         ]);
         
         pVideos = results[0];
         pixVideos = results[1];
         gGiphy = results[2];
         communityVideos = results[3];
-
-        combinedResults = [...matchedManualVideos, ...communityVideos, ...pVideos, ...pixVideos, ...gGiphy];
       } catch (e) {
-        console.warn("Video compilation handled gracefully:", e);
-        combinedResults = [...matchedManualVideos, ...pVideos, ...pixVideos, ...gGiphy];
+        console.warn("Video API aggregation handled gracefully:", e);
       }
+
+      combinedResults = [...matchedManualVideos, ...communityVideos, ...pVideos, ...pixVideos, ...gGiphy];
 
     } else {
       // 2. Filter local manual photos
       const matchedManualPhotos = (typeof manualPhotos !== 'undefined') ? manualPhotos.filter(photo => {
         const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
         if (!deviceMatch) return false;
-        if (query === 'trending') return photo.isTrending;
-        if (!query || query === 'popular' || query === '') return true;
-        return photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+        if (lowerQuery === 'trending') return photo.isTrending;
+        if (!lowerQuery || lowerQuery === 'popular') return true;
+        return photo.tags && photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
       }) : [];
 
       let u = [], p = [], pix = [], communityPhotos = [];
 
       try {
-        const apiQuery = (query === 'trending') ? 'nature aesthetic' : query;
+        // Use the actual search query if it exists, otherwise fall back to default
+        const apiQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '') ? 'nature aesthetic' : query;
         
-        // Fetch from external APIs AND your new Supabase database table
         const results = await Promise.all([
           (typeof getUnsplashPhotos === 'function') ? getUnsplashPhotos(apiQuery).catch(() => []) : [],
           (typeof getPexelsPhotos === 'function') ? getPexelsPhotos(apiQuery).catch(() => []) : [],
           (typeof getPixabayPhotos === 'function') ? getPixabayPhotos(apiQuery).catch(() => []) : [],
-          getCommunityWalls(query, 'home').catch(() => []) // 🌟 Supabase photos fetch!
+          (typeof getCommunityWalls === 'function') ? getCommunityWalls(query, 'home').catch(() => []) : []
         ]);
 
         u = results[0];
         p = results[1];
         pix = results[2];
         communityPhotos = results[3];
-
-        combinedResults = [...matchedManualPhotos, ...communityPhotos, ...u, ...p, ...pix];
       } catch (e) {
-        console.warn("Photo async aggregation failed, bypassing safely:", e);
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix];
+        console.warn("Photo API aggregation handled gracefully:", e);
       }
+
+      combinedResults = [...matchedManualPhotos, ...communityPhotos, ...u, ...p, ...pix];
     }
 
-    // Render the final combined list onto the UI grid
+    // Render the final filtered list onto the UI grid
     if (combinedResults.length > 0 && typeof displayItems === 'function') {
       displayItems(combinedResults);
     } else if (gallery) {
@@ -1494,7 +1492,6 @@ async function fetchGallery(query = '') {
     if (gallery) gallery.innerHTML = '<p class="error">System connection error. Unable to load catalog items.</p>';
   }
 }
-
 // ==========================================
 // 3. API FETCHERS (PHOTOS)
 // ==========================================
