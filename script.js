@@ -1459,7 +1459,7 @@ async function fetchGallery(query = '') {
     getUnsplashPhotos(apiQuery).catch(() => []),
     getPexelsPhotos(apiQuery).catch(() => []),
     getPixabayPhotos(apiQuery).catch(() => []),
-    getWaifuPhotos(apiQuery).catch(() => [])
+    
 ]);
         u = results[0];
 p = results[1];
@@ -1467,7 +1467,7 @@ pix = results[2];
 waifu = results[3];
 
         // Combine and show the fast results immediately!
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...waifu];
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix,];
         displayItems(combinedResults);
 
         // Step 3: Fire & Forget Wallhaven in the background so it doesn't block the page load!
@@ -1481,7 +1481,7 @@ waifu = results[3];
 
       } catch (e) {
         console.warn("Photo APIs fallback routing active:", e); 
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix, ...waifu]; 
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix,]; 
         displayItems(combinedResults);
       }
     }
@@ -1548,54 +1548,7 @@ async function getPixabayPhotos(query) {
   }
 }
 
-async function getWaifuPhotos(query) {
 
-    try {
-
-        const results = [];
-
-        for (let i = 0; i < 12; i++) {
-
-            const response = await fetch(
-                'https://api.waifu.pics/sfw/waifu'
-            );
-
-            const data = await response.json();
-
-            results.push({
-
-                type: 'image',
-
-                preview: data.url,
-
-                download: data.url,
-
-                aspect: 'mobile',
-
-                author: 'Waifu API',
-tags: [
-                    'anime',
-                    'waifu',
-                    'aesthetic',
-                    query
-                ],
-
-                isTrending: true
-            });
-        }
-
-        return results;
-
-    } catch (err) {
-
-        console.error(
-            'Waifu API failed:',
-            err
-        );
-
-        return [];
-    }
-}
 // ==========================================
 // 4. API FETCHERS (VIDEOS / LIVE)
 // ==========================================
