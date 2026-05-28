@@ -1863,22 +1863,30 @@ async function getCommunityWalls(query = '', activeMode = 'home') {
     
     if (error || !data) return [];
 
-    // Filter by mode (image vs video) safely
+    // 1. Separate image entries from video entries safely
     const filteredData = data.filter(item => (item.type || 'image') === targetType);
     const lowerQuery = query.toLowerCase().trim();
     
-    const mappedWalls = filteredData.map(item => ({
-      type: item.type || 'image',
-      preview: item.url,    
-      download: item.url,   
-      author: item.author || 'Anonymous Creator',
-      title: item.title || 'Community Design',
-      // Ensure tags is always an array so it never crashes .some()
-      tags: item.tags ? item.tags.split(',').map(t => t.trim().toLowerCase()) : []
-    }));
+    // 2. Map data into your gallery's layout structure
+    const mappedWalls = filteredData.map(item => {
+      // Safely process tags string into an array
+      let tagArray = [];
+      if (item.tags) {
+        tagArray = item.tags.split(',').map(t => t.trim().toLowerCase());
+      }
 
-    // If there's an active search query, filter the community results
-    if (lowerQuery && lowerQuery !== 'trending' && lowerQuery !== 'popular' && lowerQuery !== 'nature aesthetic') {
+      return {
+        type: item.type || 'image',
+        preview: item.url,    
+        download: item.url,   
+        author: item.author || 'Anonymous Creator',
+        title: item.title || 'Community Design',
+        tags: tagArray
+      };
+    });
+
+    // 3. Apply active filters if a user typed a specific keyword
+    if (lowerQuery && lowerQuery !== 'trending' && lowerQuery !== 'popular' && lowerQuery !== 'nature aesthetic' && lowerQuery !== 'mobile wallpaper' && lowerQuery !== 'desktop wallpaper') {
       return mappedWalls.filter(w => 
         w.title.toLowerCase().includes(lowerQuery) ||
         w.author.toLowerCase().includes(lowerQuery) ||
@@ -1888,7 +1896,7 @@ async function getCommunityWalls(query = '', activeMode = 'home') {
 
     return mappedWalls;
   } catch (e) {
-    console.error("Supabase search filter dropped:", e);
+    console.error("Supabase community query handling error:", e);
     return [];
   }
 }
