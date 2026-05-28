@@ -3,7 +3,7 @@ const KEYS = {
     pexels: 'o1X7PyrGxEiaDgdyxq6j2ewlQsU8wBGg6ZIENUBThf4yudD59NiE2QUc',
     pixabay: '55660755-90f69456cc2ac320284d8b998',
     giphy:'uoq7COESx8HCtVEt6wx4FwPpXuwKb6WM'
-};
+}
 const SUPABASE_URL = 'https://hfimscpqwflrbairzjfv.supabase.co';
 // 🛑 PASTE YOUR MASSIVE PUBLIC ANON KEY (STARTING WITH eyJhbGci...) INSIDE THE QUOTES BELOW:
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmaW1zY3Bxd2ZscmJhaXJ6amZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NTA5OTMsImV4cCI6MjA5NTUyNjk5M30.N3IlIcmU5m6pG2ay1MEREN_UoeGgUbOGuAlJWFE0SgM';
