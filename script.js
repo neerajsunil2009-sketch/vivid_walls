@@ -1403,93 +1403,70 @@ async function fetchGallery(query = '') {
   currentSearchQuery = query;
   const gallery = document.getElementById('gallery');
   if (gallery) {
-    gallery.innerHTML = '<div class="loader">Curating Trending Walls...</div>';
+    gallery.innerHTML = '<div class="loader">Curating Walls...</div>';
   }
 
   const lowerQuery = query.toLowerCase().trim();
   const userDevice = window.innerWidth < 768 ? 'mobile' : 'pc';
   const mode = currentMain;
 
+  // 1. GATHER LOCAL MANUAL ASSETS SAFELY FIRST
+  let matchedManualItems = [];
+  if (mode === 'live') {
+    matchedManualItems = (typeof manualVideos !== 'undefined') ? manualVideos.filter(vid => {
+      const deviceMatch = vid.aspect === 'all' || vid.aspect === userDevice;
+      if (!deviceMatch) return false;
+      if (lowerQuery === 'trending') return vid.isTrending;
+      if (!lowerQuery || lowerQuery === 'popular') return true;
+      return vid.tags && vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+    }) : [];
+  } else {
+    matchedManualItems = (typeof manualPhotos !== 'undefined') ? manualPhotos.filter(photo => {
+      const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
+      if (!deviceMatch) return false;
+      if (lowerQuery === 'trending') return photo.isTrending;
+      if (!lowerQuery || lowerQuery === 'popular') return true;
+      return photo.tags && photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+    }) : [];
+  }
+
+  // 2. FETCH CLOUD PLUGINS INDEPENDENTLY (No crash propagation)
+  let communityResults = [];
+  let apiResults1 = [];
+  let apiResults2 = [];
+  let apiResults3 = [];
+
+  // Always pull Supabase records first
   try {
-    let combinedResults = [];
-
-    if (mode === 'live') {
-      // 1. Filter local manual videos
-      const matchedManualVideos = (typeof manualVideos !== 'undefined') ? manualVideos.filter(vid => {
-        const deviceMatch = vid.aspect === 'all' || vid.aspect === userDevice;
-        if (!deviceMatch) return false;
-        if (lowerQuery === 'trending') return vid.isTrending;
-        if (!lowerQuery || lowerQuery === 'popular') return true;
-        return vid.tags && vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
-      }) : [];
-
-      let pVideos = [], pixVideos = [], gGiphy = [], communityVideos = [];
-
-      try {
-        // Use the actual search query if it exists, otherwise fall back to popular
-        const apiQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '') ? 'popular' : query;
-        
-        const results = await Promise.all([
-          (typeof getPexelsVideos === 'function') ? getPexelsVideos(apiQuery).catch(() => []) : [],
-          (typeof getPixabayVideos === 'function') ? getPixabayVideos(apiQuery).catch(() => []) : [],
-          (typeof getGiphyVideos === 'function') ? getGiphyVideos(apiQuery).catch(() => []) : [],
-          (typeof getCommunityWalls === 'function') ? getCommunityWalls(query, 'live').catch(() => []) : []
-        ]);
-        
-        pVideos = results[0];
-        pixVideos = results[1];
-        gGiphy = results[2];
-        communityVideos = results[3];
-      } catch (e) {
-        console.warn("Video API aggregation handled gracefully:", e);
-      }
-
-      combinedResults = [...matchedManualVideos, ...communityVideos, ...pVideos, ...pixVideos, ...gGiphy];
-
-    } else {
-      // 2. Filter local manual photos
-      const matchedManualPhotos = (typeof manualPhotos !== 'undefined') ? manualPhotos.filter(photo => {
-        const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
-        if (!deviceMatch) return false;
-        if (lowerQuery === 'trending') return photo.isTrending;
-        if (!lowerQuery || lowerQuery === 'popular') return true;
-        return photo.tags && photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
-      }) : [];
-
-      let u = [], p = [], pix = [], communityPhotos = [];
-
-      try {
-        // Use the actual search query if it exists, otherwise fall back to default
-        const apiQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '') ? 'nature aesthetic' : query;
-        
-        const results = await Promise.all([
-          (typeof getUnsplashPhotos === 'function') ? getUnsplashPhotos(apiQuery).catch(() => []) : [],
-          (typeof getPexelsPhotos === 'function') ? getPexelsPhotos(apiQuery).catch(() => []) : [],
-          (typeof getPixabayPhotos === 'function') ? getPixabayPhotos(apiQuery).catch(() => []) : [],
-          (typeof getCommunityWalls === 'function') ? getCommunityWalls(query, 'home').catch(() => []) : []
-        ]);
-
-        u = results[0];
-        p = results[1];
-        pix = results[2];
-        communityPhotos = results[3];
-      } catch (e) {
-        console.warn("Photo API aggregation handled gracefully:", e);
-      }
-
-      combinedResults = [...matchedManualPhotos, ...communityPhotos, ...u, ...p, ...pix];
+    if (typeof getCommunityWalls === 'function') {
+      communityResults = await getCommunityWalls(query, mode);
     }
+  } catch (err) {
+    console.warn("Supabase local layer fallback:", err);
+  }
 
-    // Render the final filtered list onto the UI grid
-    if (combinedResults.length > 0 && typeof displayItems === 'function') {
-      displayItems(combinedResults);
-    } else if (gallery) {
-      gallery.innerHTML = '<p class="no-results">No wallpapers found matching criteria.</p>';
-    }
+  // Setup API queries safely
+  const photoApiFallback = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '') ? 'nature aesthetic' : query;
+  const videoApiFallback = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '') ? 'popular' : query;
 
-  } catch (error) {
-    console.error("Critical rendering pipeline fallback activated:", error);
-    if (gallery) gallery.innerHTML = '<p class="error">System connection error. Unable to load catalog items.</p>';
+  if (mode === 'live') {
+    try { if (typeof getPexelsVideos === 'function') apiResults1 = await getPexelsVideos(videoApiFallback); } catch(e){}
+    try { if (typeof getPixabayVideos === 'function') apiResults2 = await getPixabayVideos(videoApiFallback); } catch(e){}
+    try { if (typeof getGiphyVideos === 'function') apiResults3 = await getGiphyVideos(videoApiFallback); } catch(e){}
+  } else {
+    try { if (typeof getUnsplashPhotos === 'function') apiResults1 = await getUnsplashPhotos(photoApiFallback); } catch(e){}
+    try { if (typeof getPexelsPhotos === 'function') apiResults2 = await getPexelsPhotos(photoApiFallback); } catch(e){}
+    try { if (typeof getPixabayPhotos === 'function') apiResults3 = await getPixabayPhotos(photoApiFallback); } catch(e){}
+  }
+
+  // Combine everything that succeeded
+  const combinedResults = [...matchedManualItems, ...communityResults, ...apiResults1, ...apiResults2, ...apiResults3];
+
+  // 3. RENDER ASSETS ON TO USER INTERFACE
+  if (combinedResults.length > 0 && typeof displayItems === 'function') {
+    displayItems(combinedResults);
+  } else if (gallery) {
+    gallery.innerHTML = '<p class="no-results">No wallpapers found matching your search.</p>';
   }
 }
 // ==========================================
