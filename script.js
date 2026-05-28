@@ -1,4 +1,141 @@
+// ========================================================
+// 1. SUPABASE BASE CONFIGURATION & INITIALIZATION
+// ========================================================
+const SUPABASE_URL = 'https://hfimscpqwflrbairzjfv.supabase.co';
+const SUPABASE_ANON_KEY = 'https://hfimscpqwflrbairzjfv.supabase.co/rest/v1/community_wallpaper'; // <-- Paste your long anon key string here!
 
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+// ========================================================
+// 2. FRONTEND UPLOAD FORM INTERACTIVE MODALS
+// ========================================================
+function toggleUploadModal(show) {
+  const modal = document.getElementById('upload-modal');
+  if (modal) {
+    modal.style.display = show ? 'flex' : 'none';
+  }
+}
+
+// Handles form submissions, image streaming, and row population
+async function handleWallpaperUpload(event) {
+  event.preventDefault();
+  
+  const submitBtn = document.getElementById('submit-upload-btn');
+  const fileInput = document.getElementById('wall-file');
+  const title = document.getElementById('wall-title').value.trim();
+  const author = document.getElementById('wall-author').value.trim();
+  const type = document.getElementById('wall-type').value;
+  const rawTags = document.getElementById('wall-tags').value.trim();
+
+  if (!fileInput.files || fileInput.files.length === 0) {
+    alert("Please select an image or video file to upload!");
+    return;
+  }
+
+  const file = fileInput.files[0];
+  submitBtn.innerText = "Uploading to Cloud Storage...";
+  submitBtn.disabled = true;
+
+  try {
+    // Generate a unique file signature layout to eliminate duplicate asset naming conflicts
+    const fileExtension = file.name.split('.').pop();
+    const uniqueFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExtension}`;
+    
+    // Upload raw file binary to your 'wallpapers' public storage bucket folder
+    const { data: storageData, error: storageError } = await supabaseClient.storage
+      .from('wallpapers')
+      .upload(`uploads/${uniqueFileName}`, file);
+
+    if (storageError) throw storageError;
+
+    // Extract the static public asset web link URL
+    const { data: urlData } = supabaseClient.storage
+      .from('wallpapers')
+      .getPublicUrl(`uploads/${uniqueFileName}`);
+    
+    const assetPublicUrl = urlData.publicUrl;
+
+    // Standardize text strings into a clean search array format
+    const tagsArray = rawTags.split(',').map(t => t.trim().toLowerCase()).filter(t => t !== "");
+
+    // Write a new item entry directly into your database rows
+    const { error: dbError } = await supabaseClient
+      .from('community_wallpapers')
+      .insert([
+        {
+          title: title,
+          author: author,
+          type: type,
+          url: assetPublicUrl,
+          tags: tagsArray
+        }
+      ]);
+
+    if (dbError) throw dbError;
+
+    alert("🎉 Wallpaper successfully added to the global community library!");
+    document.getElementById('wallpaper-upload-form').reset();
+    toggleUploadModal(false);
+    
+    // Automatically call engine layout refresh to load the new item instantly
+    if (typeof fetchGallery === 'function') {
+      fetchGallery(typeof currentSearchQuery !== 'undefined' ? currentSearchQuery : '');
+    }
+
+  } catch (err) {
+    console.error("Community deployment asset tracking failed:", err);
+    alert(`System configuration error: ${err.message || "Failed to finalize database injection."}`);
+  } finally {
+    submitBtn.innerText = "Publish to Community";
+    submitBtn.disabled = false;
+  }
+}
+
+
+// ========================================================
+// 3. DATABASE CALL ENGINE REPOSITORY RECEIVER
+// ========================================================
+async function getCommunityWalls(query = '', activeMode = 'home') {
+  try {
+    // Direct routing match: 'home' mode looks for 'image' items, 'live' mode looks for 'video' items
+    const targetType = activeMode === 'live' ? 'video' : 'image';
+    
+    let { data, error } = await supabaseClient
+      .from('community_wallpapers')
+      .select('*')
+      .eq('type', targetType);
+    
+    if (error) throw error;
+    if (!data || data.length === 0) return [];
+
+    const lowerQuery = query.toLowerCase().trim();
+    
+    // Map backend row layouts to cleanly match your app's standard layout keys
+    const mappedWalls = data.map(item => ({
+      type: item.type,
+      preview: item.url,    
+      download: item.url,   
+      author: item.author || 'Anonymous User',
+      title: item.title || 'Untitled Creation',
+      tags: Array.isArray(item.tags) ? item.tags : []
+    }));
+
+    // If a search filter is typed, run keyword match array checks
+    if (lowerQuery && lowerQuery !== 'trending' && lowerQuery !== 'popular') {
+      return mappedWalls.filter(w => 
+        w.title.toLowerCase().includes(lowerQuery) ||
+        w.author.toLowerCase().includes(lowerQuery) ||
+        w.tags.some(tag => tag.includes(lowerQuery))
+      );
+    }
+
+    return mappedWalls;
+  } catch (e) {
+    console.warn("Could not retrieve community database entries fallback routing active:", e);
+    return [];
+  }
+}
 const KEYS = {
     unsplash: 'yr1wxgn6oZ2XeIZcbZwBPpsImtrY6Ah8ZIn0DJ6cqiE',
     pexels: 'o1X7PyrGxEiaDgdyxq6j2ewlQsU8wBGg6ZIENUBThf4yudD59NiE2QUc',
@@ -1447,43 +1584,32 @@ async function fetchGallery(query = '') {
         return photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
       }) : [];
 
-      // Step 1: Immediately show manual assets
+      // Instantly render your hardcoded array photos so the site feels fast
       displayItems(matchedManualPhotos);
 
-      let u = [], p = [], pix = [];
+      let u = [], p = [], pix = [], communityPhotos = [];
 
       try {
         const apiQuery = (query === 'trending') ? 'nature aesthetic' : query;
         
-        // Step 2: ONLY wait for the fast APIs that don't use a proxy
+        // Parallel fetch structure that loads everything simultaneously
         const results = await Promise.all([
-    getUnsplashPhotos(apiQuery).catch(() => []),
-    getPexelsPhotos(apiQuery).catch(() => []),
-    getPixabayPhotos(apiQuery).catch(() => []),
-    
-]);
+          getUnsplashPhotos(apiQuery).catch(() => []),
+          getPexelsPhotos(apiQuery).catch(() => []),
+          getPixabayPhotos(apiQuery).catch(() => []),
+          getCommunityWalls(query, 'home').catch(() => []) // Your fresh backend call!
+        ]);
+
         u = results[0];
-p = results[1];
-pix = results[2];
-waifu = results[3];
+        p = results[1];
+        pix = results[2];
+        communityPhotos = results[3]; // Clean data storage assignment
 
-        // Combine and show the fast results immediately!
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix,];
-        displayItems(combinedResults);
-
-        // Step 3: Fire & Forget Wallhaven in the background so it doesn't block the page load!
-        getWallhavenPhotos(apiQuery).then(w => {
-          if (w && w.length > 0) {
-            // Append Wallhaven images to the grid seamlessly when they arrive
-            combinedResults = [...combinedResults, ...w];
-            displayItems(combinedResults);
-          }
-        }).catch(err => console.warn("Background Wallhaven loading skipped:", err));
-
+        // Combine all arrays together, placing community uploads directly up front
+        combinedResults = [...matchedManualPhotos, ...communityPhotos, ...u, ...p, ...pix];
       } catch (e) {
         console.warn("Photo APIs fallback routing active:", e); 
-        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix,]; 
-        displayItems(combinedResults);
+        combinedResults = [...matchedManualPhotos, ...u, ...p, ...pix]; 
       }
     }
 
