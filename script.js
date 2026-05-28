@@ -2,7 +2,7 @@
 // 1. SUPABASE BASE CONFIGURATION & INITIALIZATION
 // ========================================================
 const SUPABASE_URL = 'https://hfimscpqwflrbairzjfv.supabase.co';
-const SUPABASE_ANON_KEY = 'https://hfimscpqwflrbairzjfv.supabase.co/rest/v1/community_wallpaper'; // <-- Paste your long anon key string here!
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmaW1zY3Bxd2ZscmJhaXJ6amZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NTA5OTMsImV4cCI6MjA5NTUyNjk5M30.N3IlIcmU5m6pG2ay1MEREN_UoeGgUbOGuAlJWFE0SgM'; // <-- Paste your long anon key string here!
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
