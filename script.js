@@ -1357,15 +1357,7 @@ const manualVideos = [
     tags: ['anime', 'trending', 'cool', 'live wallpaper', '4k video', 'all'],
     isTrending: true
   },
-  {
-    type: 'video', // 🌟 Set to video for .mp4 playback
-    preview: 'videos/@official_anime_artist_threadsmate.com_1779361101.mp4',
-    download: 'videos/@official_anime_artist_threadsmate.com_1779361101.mp4',
-    aspect: 'pc',
-    author: 'Akshay',
-    tags: ['anime', 'trending', 'cool', 'live wallpaper', '4k video', 'all'],
-    isTrending: true
-  },
+  
   {
     type: 'video', // 🌟 Set to video for .mp4 playback
     preview: 'videos/@4k_sahaj_threadsmate.com_1779361178.mp4',
