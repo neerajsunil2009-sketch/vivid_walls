@@ -1449,23 +1449,28 @@ async function fetchGallery(query = '') {
   }
 
   // 🌟 FIX: Smart Video API search mapping so categories never load empty arrays!
+  // Set up clean fallback parameters for search APIs
   const photoApiFallback = isDefaultQuery ? 'nature aesthetic' : query;
   
   let videoApiFallback = isDefaultQuery ? 'popular' : query;
   
-  // If we are looking for video loops, map your categories to terms video APIs understand best
+  // 🌟 BULLETPROOF MAPPING: Catches whatever the sub-nav buttons send
   if (mode === 'live' && !isDefaultQuery) {
     const checkQuery = lowerQuery.trim();
-    if (checkQuery === 'anime') {
-        videoApiFallback = 'cyberpunk animation'; // Video loops matching anime aesthetics
-    } else if (checkQuery === 'marvel' || checkQuery === 'superhero') {
-        videoApiFallback = 'cgi neon background'; // High energy moving loops
-    } else if (checkQuery === 'minimalist' || checkQuery === 'minimal') {
-        videoApiFallback = 'abstract minimalist looping'; // Clean moving aesthetics
-    } else if (checkQuery === 'cars' || checkQuery === 'sports') {
+    
+    if (checkQuery.includes('anime')) {
+        videoApiFallback = 'cyberpunk animation'; 
+    } else if (checkQuery.includes('marvel') || checkQuery.includes('superhero')) {
+        videoApiFallback = 'neon aesthetic loop'; 
+    } else if (checkQuery.includes('minimalist') || checkQuery.includes('minimal')) {
+        videoApiFallback = 'abstract minimalist looping'; 
+    } else if (checkQuery.includes('sports') || checkQuery.includes('car')) {
         videoApiFallback = 'supercar slow motion'; 
-    } else if (checkQuery === 'nature') {
+    } else if (checkQuery.includes('nature')) {
         videoApiFallback = 'cinematic nature 4k';
+    } else {
+        // If they search for something else entirely, give them abstract loops instead of a blank screen
+        videoApiFallback = query + ' loop'; 
     }
   }
 
