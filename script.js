@@ -1629,57 +1629,59 @@ async function getPixabayVideos(query) {
 
 // --- 5. DISPLAY & INTERFACE LOGIC ---
 
-function displayItems(items) {
+function displayItems(items, query = '') {
     const gallery = document.getElementById('gallery');
-    if (!gallery) return;
-    
-    gallery.innerHTML = ''; // Clear out the loader or old cards safely
+    if (!items || items.length === 0) return;
 
-    // 1. FILTER: Make sure we only show matching items for the current layout mode
-    const filteredItems = items.filter(item => {
-        if (currentMain === 'live') {
-            // Accept it if the type is explicitly 'live' OR 'video'
-            return item.type === 'live' || item.type === 'video';
-        } else {
-            // For standard/normal mode, ignore video assets
-            return item.type !== 'live' && item.type !== 'video';
-        }
-    });
+    gallery.innerHTML = ''; 
 
-    if (filteredItems.length === 0) {
-        gallery.innerHTML = '<p class="no-results">No wallpapers found in this category.</p>';
-        return;
-    }
-
-    // 2. RENDER LOOP
-    filteredItems.forEach(item => {
+    items.forEach(item => {
         const card = document.createElement('div');
-        card.className = 'wallpaper-card';
+        card.className = 'wall-card';
 
-        // Check if it's a live video loop
-        if (item.type === 'live' || item.type === 'video') {
-            card.innerHTML = `
-                <div class="media-container">
-                    <video src="${item.preview}" loop muted playsinline autoplay onerror="this.style.display='none';"></video>
-                </div>
-                <div class="card-info">
-                    <p class="author-name">${item.author || 'Creator'}</p>
-                    <button class="download-btn" onclick="downloadVideo('${item.preview}')">Download</button>
-                </div>
-            `;
-        } else {
-            // Standard static picture rendering
-            card.innerHTML = `
-                <div class="media-container">
-                    <img src="${item.preview}" alt="Wallpaper" loading="lazy">
-                </div>
-                <div class="card-info">
-                    <p class="author-name">${item.author || 'Artist'}</p>
-                    <button class="download-btn" onclick="downloadImage('${item.preview}')">Download</button>
-                </div>
-            `;
+        // Combine all tags into a clean comma-separated string for Google bots to read
+        const searchKeywords = item.tags ? item.tags.join(', ') : 'wallpaper';
+        // Create a SEO friendly title string
+        const seoTitle = `${item.tags && item.tags[0] ? item.tags[0] : 'aesthetic'} wallpaper - Vivid Walls`;
+
+        // Apply tags as data attributes to the card element container for crawling accessibility
+        card.setAttribute('data-keywords', searchKeywords);
+
+        // 1. Setup Priority/Trending badge
+        const trendingBadge = (item.author === 'ashik' && query === 'trending')
+            ? `<div class="trending-badge">★ Priority</div>`
+            : '';
+
+        // 2. Build media content tags with explicit descriptive keywords embedded 
+        const isVideo = item.type === 'video' || (item.download && item.download.endsWith('.mp4'));
+        const content = isVideo
+            ? `<video src="${item.preview}" title="${seoTitle} (${searchKeywords})" aria-label="${seoTitle}" loop muted onmouseover="this.play()" onmouseout="this.pause()"></video>`
+            : `<img src="${item.preview}" alt="${seoTitle} - ${searchKeywords}" title="${seoTitle}" loading="lazy">`; 
+
+        const extension = isVideo ? '.mp4' : '.jpg';
+        
+        // Use the first tag keyword for file naming
+        let tagKeyword = 'wallpaper';
+        if (item.tags && item.tags.length > 0) {
+            tagKeyword = item.tags[0].trim().toLowerCase().replace(/\s+/g, '_');
         }
+        const fileName = `${tagKeyword}${extension}`;
 
+        // 3. Render the card element layout structure
+        card.innerHTML = `
+            ${trendingBadge}
+            ${content}
+            <div class="card-info">
+                <span>By ${item.author || 'Akshay'}</span>
+                <button 
+                    onclick="startDirectDownload('${item.download || item.preview}', '${fileName}')" 
+                    class="download-btn"
+                    aria-label="Download ${seoTitle}">
+                    Download
+                </button>
+            </div>
+        `;
+        
         gallery.appendChild(card);
     });
 }
