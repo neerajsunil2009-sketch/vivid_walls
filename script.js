@@ -1410,14 +1410,17 @@ async function fetchGallery(query = '') {
   const userDevice = window.innerWidth < 768 ? 'mobile' : 'pc';
   const mode = currentMain;
 
-  // 1. GATHER LOCAL MANUAL ASSETS SAFELY FIRST
+  // 1. Check if the user is looking for a default stream or an explicit search term
+  const isDefaultQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper');
+
+  // 2. GATHER LOCAL MANUAL ASSETS SAFELY FIRST
   let matchedManualItems = [];
   if (mode === 'live') {
     matchedManualItems = (typeof manualVideos !== 'undefined') ? manualVideos.filter(vid => {
       const deviceMatch = vid.aspect === 'all' || vid.aspect === userDevice;
       if (!deviceMatch) return false;
       if (lowerQuery === 'trending') return vid.isTrending;
-      if (!lowerQuery || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper') return true;
+      if (isDefaultQuery) return true; // Show everything on basic landing paths
       return vid.tags && vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
     }) : [];
   } else {
@@ -1425,17 +1428,18 @@ async function fetchGallery(query = '') {
       const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
       if (!deviceMatch) return false;
       if (lowerQuery === 'trending') return photo.isTrending;
-      if (!lowerQuery || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper') return true;
+      if (isDefaultQuery) return true; // Show everything on basic landing paths
       return photo.tags && photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
     }) : [];
   }
 
-  // 2. FETCH CLOUD PLUGINS INDEPENDENTLY 
+  // 3. FETCH CLOUD PLUGINS INDEPENDENTLY (No crash propagation)
   let communityResults = [];
   let apiResults1 = [];
   let apiResults2 = [];
   let apiResults3 = [];
 
+  // Pull Supabase records 
   try {
     if (typeof getCommunityWalls === 'function') {
       communityResults = await getCommunityWalls(query, mode);
@@ -1444,8 +1448,7 @@ async function fetchGallery(query = '') {
     console.warn("Supabase local layer fallback:", err);
   }
 
-  // Set up clean fallback parameters for search APIs
-  const isDefaultQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper');
+  // Assign API fallback defaults safely if query represents a landing path string
   const photoApiFallback = isDefaultQuery ? 'nature aesthetic' : query;
   const videoApiFallback = isDefaultQuery ? 'popular' : query;
 
@@ -1462,18 +1465,20 @@ async function fetchGallery(query = '') {
   // Combine everything that succeeded
   let combinedResults = [...matchedManualItems, ...communityResults, ...apiResults1, ...apiResults2, ...apiResults3];
 
-  // 🌟 CRITICAL FIX: If user searched a custom query, make sure the API results are strictly filtered too!
+  // 🌟 FIX THE OVERRIDE: If it's a custom query search, ensure API cards don't flood out matched assets!
   if (!isDefaultQuery) {
     combinedResults = combinedResults.filter(item => {
+      // If it comes from external APIs, it's already filtered by their servers via the API endpoint parameter
+      if (item.fromAPI) return true; 
+
       const titleMatch = item.title && item.title.toLowerCase().includes(lowerQuery);
       const authorMatch = item.author && item.author.toLowerCase().includes(lowerQuery);
       const tagMatch = item.tags && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
-      // External APIs don't always have explicit titles/tags properties mapped, so we preserve them during exact query searches
-      return titleMatch || authorMatch || tagMatch || item.fromAPI; 
+      return titleMatch || authorMatch || tagMatch;
     });
   }
 
-  // 3. RENDER ASSETS ON TO USER INTERFACE
+  // 4. RENDER ASSETS ON TO USER INTERFACE
   if (combinedResults.length > 0 && typeof displayItems === 'function') {
     displayItems(combinedResults);
   } else if (gallery) {
