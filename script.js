@@ -1417,7 +1417,7 @@ async function fetchGallery(query = '') {
       const deviceMatch = vid.aspect === 'all' || vid.aspect === userDevice;
       if (!deviceMatch) return false;
       if (lowerQuery === 'trending') return vid.isTrending;
-      if (!lowerQuery || lowerQuery === 'popular') return true;
+      if (!lowerQuery || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper') return true;
       return vid.tags && vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
     }) : [];
   } else {
@@ -1425,18 +1425,17 @@ async function fetchGallery(query = '') {
       const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
       if (!deviceMatch) return false;
       if (lowerQuery === 'trending') return photo.isTrending;
-      if (!lowerQuery || lowerQuery === 'popular') return true;
+      if (!lowerQuery || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper') return true;
       return photo.tags && photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
     }) : [];
   }
 
-  // 2. FETCH CLOUD PLUGINS INDEPENDENTLY (No crash propagation)
+  // 2. FETCH CLOUD PLUGINS INDEPENDENTLY 
   let communityResults = [];
   let apiResults1 = [];
   let apiResults2 = [];
   let apiResults3 = [];
 
-  // Always pull Supabase records first
   try {
     if (typeof getCommunityWalls === 'function') {
       communityResults = await getCommunityWalls(query, mode);
@@ -1445,9 +1444,10 @@ async function fetchGallery(query = '') {
     console.warn("Supabase local layer fallback:", err);
   }
 
-  // Setup API queries safely
-  const photoApiFallback = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '') ? 'nature aesthetic' : query;
-  const videoApiFallback = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '') ? 'popular' : query;
+  // Set up clean fallback parameters for search APIs
+  const isDefaultQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper');
+  const photoApiFallback = isDefaultQuery ? 'nature aesthetic' : query;
+  const videoApiFallback = isDefaultQuery ? 'popular' : query;
 
   if (mode === 'live') {
     try { if (typeof getPexelsVideos === 'function') apiResults1 = await getPexelsVideos(videoApiFallback); } catch(e){}
@@ -1460,7 +1460,18 @@ async function fetchGallery(query = '') {
   }
 
   // Combine everything that succeeded
-  const combinedResults = [...matchedManualItems, ...communityResults, ...apiResults1, ...apiResults2, ...apiResults3];
+  let combinedResults = [...matchedManualItems, ...communityResults, ...apiResults1, ...apiResults2, ...apiResults3];
+
+  // 🌟 CRITICAL FIX: If user searched a custom query, make sure the API results are strictly filtered too!
+  if (!isDefaultQuery) {
+    combinedResults = combinedResults.filter(item => {
+      const titleMatch = item.title && item.title.toLowerCase().includes(lowerQuery);
+      const authorMatch = item.author && item.author.toLowerCase().includes(lowerQuery);
+      const tagMatch = item.tags && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+      // External APIs don't always have explicit titles/tags properties mapped, so we preserve them during exact query searches
+      return titleMatch || authorMatch || tagMatch || item.fromAPI; 
+    });
+  }
 
   // 3. RENDER ASSETS ON TO USER INTERFACE
   if (combinedResults.length > 0 && typeof displayItems === 'function') {
@@ -1476,49 +1487,25 @@ async function getUnsplashPhotos(query) {
   try {
     const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15&client_id=${KEYS.unsplash}`);
     const data = await res.json();
-    return (data.results || []).map(img => ({
-      type: 'image',
-      preview: img.urls.regular,
-      download: img.urls.full,
-      author: img.user.name
-    }));
-  } catch (error) {
-    return [];
-  }
+    return (data.results || []).map(img => ({ type: 'image', preview: img.urls.regular, download: img.urls.full, author: img.user.name, fromAPI: true }));
+  } catch (error) { return []; }
 }
 
 async function getPexelsPhotos(query) {
   try {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15`, {
-      headers: { Authorization: KEYS.pexels }
-    });
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=15`, { headers: { Authorization: KEYS.pexels } });
     const data = await res.json();
-    return (data.photos || []).map(img => ({
-      type: 'image',
-      preview: img.src.large,
-      download: img.src.original,
-      author: img.photographer
-    }));
-  } catch (error) {
-    return [];
-  }
+    return (data.photos || []).map(img => ({ type: 'image', preview: img.src.large, download: img.src.original, author: img.photographer, fromAPI: true }));
+  } catch (error) { return []; }
 }
 
 async function getPixabayPhotos(query) {
   try {
     const res = await fetch(`https://pixabay.com/api/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&orientation=${pixabayOrientation}&per_page=15`);
     const data = await res.json();
-    return (data.hits || []).map(img => ({
-      type: 'image',
-      preview: img.largeImageURL,
-      download: img.largeImageURL,
-      author: img.user
-    }));
-  } catch (error) {
-    return [];
-  }
+    return (data.hits || []).map(img => ({ type: 'image', preview: img.largeImageURL, download: img.largeImageURL, author: img.user, fromAPI: true }));
+  } catch (error) { return []; }
 }
-
 
 // ==========================================
 // 4. API FETCHERS (VIDEOS / LIVE)
