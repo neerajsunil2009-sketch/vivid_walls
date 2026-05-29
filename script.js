@@ -1631,65 +1631,57 @@ async function getPixabayVideos(query) {
 
 function displayItems(items, query = '') {
     const gallery = document.getElementById('gallery');
-    if (!gallery) return;
+    if (!items || items.length === 0) return;
 
-    // Clear old elements or skeleton frames cleanly before drawing new cards
-    gallery.innerHTML = '';
+    gallery.innerHTML = ''; 
 
-    // 1. FILTER LOCK: Ensures asset types match the current navbar view state
-    let itemsToDisplay = items.filter(item => {
-        if (currentMain === 'live') {
-            // ✨ FIX: Let both 'live' and 'video' tagged items pass through to the screen
-            return item.type === 'live' || item.type === 'video';
+    items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'wall-card';
+
+        // Combine all tags into a clean comma-separated string for Google bots to read
+        const searchKeywords = item.tags ? item.tags.join(', ') : 'wallpaper';
+        // Create a SEO friendly title string
+        const seoTitle = `${item.tags && item.tags[0] ? item.tags[0] : 'aesthetic'} wallpaper - Vivid Walls`;
+
+        // Apply tags as data attributes to the card element container for crawling accessibility
+        card.setAttribute('data-keywords', searchKeywords);
+
+        // 1. Setup Priority/Trending badge
+        const trendingBadge = (item.author === 'ashik' && query === 'trending')
+            ? `<div class="trending-badge">★ Priority</div>`
+            : '';
+
+        // 2. Build media content tags with explicit descriptive keywords embedded 
+        const isVideo = item.type === 'video' || (item.download && item.download.endsWith('.mp4'));
+        const content = isVideo
+            ? `<video src="${item.preview}" title="${seoTitle} (${searchKeywords})" aria-label="${seoTitle}" loop muted onmouseover="this.play()" onmouseout="this.pause()"></video>`
+            : `<img src="${item.preview}" alt="${seoTitle} - ${searchKeywords}" title="${seoTitle}" loading="lazy">`; 
+
+        const extension = isVideo ? '.mp4' : '.jpg';
+        
+        // Use the first tag keyword for file naming
+        let tagKeyword = 'wallpaper';
+        if (item.tags && item.tags.length > 0) {
+            tagKeyword = item.tags[0].trim().toLowerCase().replace(/\s+/g, '_');
         }
-        // For static screens, block any animated/video items completely
-        return item.type !== 'live' && item.type !== 'video';
-    });
+        const fileName = `${tagKeyword}${extension}`;
 
-    // 2. EMPTY STATE: Graceful fallback message if a category query returns empty
-    if (itemsToDisplay.length === 0) {
-        gallery.innerHTML = `
-            <div class="no-results">
-                <p>No wallpapers found matching your selection.</p>
+        // 3. Render the card element layout structure
+        card.innerHTML = `
+            ${trendingBadge}
+            ${content}
+            <div class="card-info">
+                <span>By ${item.author || 'Akshay'}</span>
+                <button 
+                    onclick="startDirectDownload('${item.download || item.preview}', '${fileName}')" 
+                    class="download-btn"
+                    aria-label="Download ${seoTitle}">
+                    Download
+                </button>
             </div>
         `;
-        return;
-    }
-
-    // 3. RENDER GENERATOR LOOP: Cycles through all approved items to draw layout cards
-    itemsToDisplay.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'wallpaper-card';
-        card.setAttribute('data-id', item.id);
-
-        // Check if the current element needs to render as a moving loop canvas
-        if (item.type === 'live' || item.type === 'video') {
-            card.innerHTML = `
-                <div class="video-wrapper">
-                    <video src="${item.preview}" loop muted playsinline autoplay></video>
-                </div>
-                <div class="card-overlay">
-                    <span class="author-name">${item.author || 'Creator'}</span>
-                    <button class="download-btn" onclick="downloadVideo('${item.preview}', '${item.id}')">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </div>
-            `;
-        } else {
-            // Standard static graphics asset presentation
-            card.innerHTML = `
-                <div class="img-wrapper">
-                    <img src="${item.preview}" alt="Wallpaper Graphics Asset" loading="lazy">
-                </div>
-                <div class="card-overlay">
-                    <span class="author-name">${item.author || 'Artist'}</span>
-                    <button class="download-btn" onclick="downloadImage('${item.preview}', '${item.id}')">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </div>
-            `;
-        }
-
+        
         gallery.appendChild(card);
     });
 }
