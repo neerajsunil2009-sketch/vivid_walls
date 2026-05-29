@@ -1250,6 +1250,16 @@ const manualVideos = [
     {
         type: 'video',
         type: 'video',
+        preview: 'videos/vividwalls.webm',
+        download: 'videos/vividwalls.webm',
+        author: 'Akshay',
+        tags: ['anime', 'trending', 'aesthetic', 'dancing girl','girl'],
+        aspect: 'pc',
+        isTrending: true
+    },
+    {
+        type: 'video',
+        type: 'video',
         preview: 'videos/crimson-blind-faith.3840x2160.mp4',
         download: 'videos/crimson-blind-faith.3840x2160.mp4',
         author: 'Akshay',
