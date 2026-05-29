@@ -1410,7 +1410,7 @@ async function fetchGallery(query = '') {
   const userDevice = window.innerWidth < 768 ? 'mobile' : 'pc';
   const mode = currentMain;
 
-  // 1. Check if the user is looking for a default stream or an explicit search term
+  // 1. Establish if we are on a basic general landing path or an explicit keyword search
   const isDefaultQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper');
 
   // 2. GATHER LOCAL MANUAL ASSETS SAFELY FIRST
@@ -1420,7 +1420,7 @@ async function fetchGallery(query = '') {
       const deviceMatch = vid.aspect === 'all' || vid.aspect === userDevice;
       if (!deviceMatch) return false;
       if (lowerQuery === 'trending') return vid.isTrending;
-      if (isDefaultQuery) return true; // Show everything on basic landing paths
+      if (isDefaultQuery) return true; // Show everything if on standard home streams
       return vid.tags && vid.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
     }) : [];
   } else {
@@ -1428,18 +1428,17 @@ async function fetchGallery(query = '') {
       const deviceMatch = photo.aspect === 'all' || photo.aspect === userDevice;
       if (!deviceMatch) return false;
       if (lowerQuery === 'trending') return photo.isTrending;
-      if (isDefaultQuery) return true; // Show everything on basic landing paths
+      if (isDefaultQuery) return true; // Show everything if on standard home streams
       return photo.tags && photo.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
     }) : [];
   }
 
-  // 3. FETCH CLOUD PLUGINS INDEPENDENTLY (No crash propagation)
+  // 3. FETCH CLOUD PLUGINS INDEPENDENTLY
   let communityResults = [];
   let apiResults1 = [];
   let apiResults2 = [];
   let apiResults3 = [];
 
-  // Pull Supabase records 
   try {
     if (typeof getCommunityWalls === 'function') {
       communityResults = await getCommunityWalls(query, mode);
@@ -1448,7 +1447,7 @@ async function fetchGallery(query = '') {
     console.warn("Supabase local layer fallback:", err);
   }
 
-  // Assign API fallback defaults safely if query represents a landing path string
+  // Set up clean fallback parameters for search APIs
   const photoApiFallback = isDefaultQuery ? 'nature aesthetic' : query;
   const videoApiFallback = isDefaultQuery ? 'popular' : query;
 
@@ -1465,12 +1464,10 @@ async function fetchGallery(query = '') {
   // Combine everything that succeeded
   let combinedResults = [...matchedManualItems, ...communityResults, ...apiResults1, ...apiResults2, ...apiResults3];
 
-  // 🌟 FIX THE OVERRIDE: If it's a custom query search, ensure API cards don't flood out matched assets!
+  // 🌟 CRITICAL FIX: If it's a custom search query, prevent external un-tagged API nodes from flooding out matching entries
   if (!isDefaultQuery) {
     combinedResults = combinedResults.filter(item => {
-      // If it comes from external APIs, it's already filtered by their servers via the API endpoint parameter
-      if (item.fromAPI) return true; 
-
+      if (item.fromAPI) return true; // External API results are already pre-filtered on their servers by keyword!
       const titleMatch = item.title && item.title.toLowerCase().includes(lowerQuery);
       const authorMatch = item.author && item.author.toLowerCase().includes(lowerQuery);
       const tagMatch = item.tags && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
@@ -1485,7 +1482,6 @@ async function fetchGallery(query = '') {
     gallery.innerHTML = '<p class="no-results">No wallpapers found matching your search.</p>';
   }
 }
-// ==========================================
 // 3. API FETCHERS (PHOTOS)
 // ==========================================
 async function getUnsplashPhotos(query) {
