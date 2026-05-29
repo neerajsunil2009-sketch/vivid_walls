@@ -1539,37 +1539,45 @@ async function getPixabayPhotos(query) {
 // 4. API FETCHERS (VIDEOS / LIVE)
 // ==========================================
 async function getPexelsVideos(query) {
-  try {
-    const q = (query === 'popular' || query === 'all') ? 'abstract loop' : query;
-    const res = await fetch(`https://api.pexels.com/videos/search?query=${encodeURIComponent(q)}&orientation=${orientation}&per_page=15`, {
-      headers: { Authorization: KEYS.pexels }
-    });
-    const data = await res.json();
-    return (data.videos || []).map(vid => ({
-      type: 'video',
-      preview: vid.video_files[0].link,
-      download: vid.video_files[0].link,
-      author: vid.user.name
-    }));
-  } catch (error) {
-    return [];
-  }
+    if (!KEYS.pexels) return [];
+    try {
+        const res = await fetch(`https://api.pexels.com/videos/search?query=${encodeURIComponent(query)}&per_page=15`, {
+            headers: { Authorization: KEYS.pexels }
+        });
+        const data = await res.json();
+        if (!data.videos) return [];
+        return data.videos.map(video => ({
+            id: `pexels-vid-${video.id}`,
+            type: 'live', // ✨ FIX: Changed from 'video' to 'live'
+            fromAPI: true,
+            preview: video.video_files.find(f => f.link.includes('.mp4'))?.link || video.video_files[0].link,
+            author: video.user.name,
+            aspect: video.width > video.height ? 'pc' : 'mobile'
+        }));
+    } catch (e) {
+        console.error("Pexels Video API Error:", e);
+        return [];
+    }
 }
 
 async function getPixabayVideos(query) {
-  try {
-    const q = (query === 'popular' || query === 'all') ? 'nature' : query;
-    const res = await fetch(`https://pixabay.com/api/videos/?key=${KEYS.pixabay}&q=${encodeURIComponent(q)}&orientation=${pixabayOrientation}&per_page=15`);
-    const data = await res.json();
-    return (data.hits || []).map(vid => ({
-      type: 'video',
-      preview: vid.videos.medium.url,
-      download: vid.videos.large.url,
-      author: vid.user
-    }));
-  } catch (error) {
-    return [];
-  }
+    if (!KEYS.pixabay) return [];
+    try {
+        const res = await fetch(`https://pixabay.com/api/videos/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&per_page=15`);
+        const data = await res.json();
+        if (!data.hits) return [];
+        return data.hits.map(video => ({
+            id: `pixabay-vid-${video.id}`,
+            type: 'live', // ✨ FIX: Changed from 'video' to 'live'
+            fromAPI: true,
+            preview: video.videos.medium.url || video.videos.small.url,
+            author: video.user,
+            aspect: video.width > video.height ? 'pc' : 'mobile'
+        }));
+    } catch (e) {
+        console.error("Pixabay Video API Error:", e);
+        return [];
+    }
 }
 
 async function getGiphyVideos(query) {
@@ -1621,59 +1629,57 @@ async function getPixabayVideos(query) {
 
 // --- 5. DISPLAY & INTERFACE LOGIC ---
 
-function displayItems(items, query = '') {
+function displayItems(items) {
     const gallery = document.getElementById('gallery');
-    if (!items || items.length === 0) return;
+    if (!gallery) return;
+    
+    gallery.innerHTML = ''; // Clear out the loader or old cards safely
 
-    gallery.innerHTML = ''; 
-
-    items.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'wall-card';
-
-        // Combine all tags into a clean comma-separated string for Google bots to read
-        const searchKeywords = item.tags ? item.tags.join(', ') : 'wallpaper';
-        // Create a SEO friendly title string
-        const seoTitle = `${item.tags && item.tags[0] ? item.tags[0] : 'aesthetic'} wallpaper - Vivid Walls`;
-
-        // Apply tags as data attributes to the card element container for crawling accessibility
-        card.setAttribute('data-keywords', searchKeywords);
-
-        // 1. Setup Priority/Trending badge
-        const trendingBadge = (item.author === 'ashik' && query === 'trending')
-            ? `<div class="trending-badge">★ Priority</div>`
-            : '';
-
-        // 2. Build media content tags with explicit descriptive keywords embedded 
-        const isVideo = item.type === 'video' || (item.download && item.download.endsWith('.mp4'));
-        const content = isVideo
-            ? `<video src="${item.preview}" title="${seoTitle} (${searchKeywords})" aria-label="${seoTitle}" loop muted onmouseover="this.play()" onmouseout="this.pause()"></video>`
-            : `<img src="${item.preview}" alt="${seoTitle} - ${searchKeywords}" title="${seoTitle}" loading="lazy">`; 
-
-        const extension = isVideo ? '.mp4' : '.jpg';
-        
-        // Use the first tag keyword for file naming
-        let tagKeyword = 'wallpaper';
-        if (item.tags && item.tags.length > 0) {
-            tagKeyword = item.tags[0].trim().toLowerCase().replace(/\s+/g, '_');
+    // 1. FILTER: Make sure we only show matching items for the current layout mode
+    const filteredItems = items.filter(item => {
+        if (currentMain === 'live') {
+            // Accept it if the type is explicitly 'live' OR 'video'
+            return item.type === 'live' || item.type === 'video';
+        } else {
+            // For standard/normal mode, ignore video assets
+            return item.type !== 'live' && item.type !== 'video';
         }
-        const fileName = `${tagKeyword}${extension}`;
+    });
 
-        // 3. Render the card element layout structure
-        card.innerHTML = `
-            ${trendingBadge}
-            ${content}
-            <div class="card-info">
-                <span>By ${item.author || 'Akshay'}</span>
-                <button 
-                    onclick="startDirectDownload('${item.download || item.preview}', '${fileName}')" 
-                    class="download-btn"
-                    aria-label="Download ${seoTitle}">
-                    Download
-                </button>
-            </div>
-        `;
-        
+    if (filteredItems.length === 0) {
+        gallery.innerHTML = '<p class="no-results">No wallpapers found in this category.</p>';
+        return;
+    }
+
+    // 2. RENDER LOOP
+    filteredItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'wallpaper-card';
+
+        // Check if it's a live video loop
+        if (item.type === 'live' || item.type === 'video') {
+            card.innerHTML = `
+                <div class="media-container">
+                    <video src="${item.preview}" loop muted playsinline autoplay onerror="this.style.display='none';"></video>
+                </div>
+                <div class="card-info">
+                    <p class="author-name">${item.author || 'Creator'}</p>
+                    <button class="download-btn" onclick="downloadVideo('${item.preview}')">Download</button>
+                </div>
+            `;
+        } else {
+            // Standard static picture rendering
+            card.innerHTML = `
+                <div class="media-container">
+                    <img src="${item.preview}" alt="Wallpaper" loading="lazy">
+                </div>
+                <div class="card-info">
+                    <p class="author-name">${item.author || 'Artist'}</p>
+                    <button class="download-btn" onclick="downloadImage('${item.preview}')">Download</button>
+                </div>
+            `;
+        }
+
         gallery.appendChild(card);
     });
 }
