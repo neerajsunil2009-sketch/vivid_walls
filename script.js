@@ -1639,9 +1639,9 @@ function displayItems(items, query = '') {
         const card = document.createElement('div');
         card.className = 'wall-card';
 
-        // Combine all tags into a clean comma-separated string for Google bots to read
-        const searchKeywords = item.tags ? item.tags.join(', ') : 'wallpaper';
-        // Create a SEO friendly title string
+if (currentMain === 'live') {       
+  return item.type === 'live' || item.type === 'video';
+  return item.type !== 'live' && item.type !== 'video';} // Create a SEO friendly title string
         const seoTitle = `${item.tags && item.tags[0] ? item.tags[0] : 'aesthetic'} wallpaper - Vivid Walls`;
 
         // Apply tags as data attributes to the card element container for crawling accessibility
