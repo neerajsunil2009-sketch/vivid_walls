@@ -1484,7 +1484,7 @@ async function fetchGallery(query = '') {
   // 🌟 FIX THE COUPLING LOOP: Don't discard API records when browsing categories!
   if (!isDefaultQuery) {
     combinedResults = combinedResults.filter(item => {
-      if (item.fromAPI) return true; // External API results are already pre-filtered by keyword on their cloud servers!
+      if (item.fromAPI || item.preview?.startsWith('http')) return true;// External API results are already pre-filtered by keyword on their cloud servers!
       
       const titleText = (item.title || '').toLowerCase();
       const authorText = (item.author || '').toLowerCase();
