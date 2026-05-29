@@ -1486,15 +1486,18 @@ async function fetchGallery(query = '') {
   }
 
   // Combine everything that succeeded
+  // Combine everything that succeeded
   let combinedResults = [...matchedManualItems, ...communityResults, ...apiResults1, ...apiResults2, ...apiResults3];
 
-  // 🌟 FIX THE COUPLING LOOP: Ensure API records aren't discarded if properties are blank
+  // 🌟 FIX THE COUPLING LOOP: Don't discard API records when browsing categories!
   if (!isDefaultQuery) {
     combinedResults = combinedResults.filter(item => {
-      if (item.fromAPI) return true; // Already filtered on the live web servers by keyword
+      if (item.fromAPI) return true; // External API results are already pre-filtered by keyword on their cloud servers!
+      
       const titleText = (item.title || '').toLowerCase();
       const authorText = (item.author || '').toLowerCase();
       const tagsMatch = item.tags && Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+      
       return titleText.includes(lowerQuery) || authorText.includes(lowerQuery) || tagsMatch;
     });
   }
