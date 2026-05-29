@@ -1439,6 +1439,7 @@ async function fetchGallery(query = '') {
   let apiResults2 = [];
   let apiResults3 = [];
 
+// --- EXISTING ASSIGNMENTS ---
   try {
     if (typeof getCommunityWalls === 'function') {
       communityResults = await getCommunityWalls(query, mode);
@@ -1447,10 +1448,28 @@ async function fetchGallery(query = '') {
     console.warn("Supabase local layer fallback:", err);
   }
 
-  // Set up clean fallback parameters for search APIs
+  // 🌟 FIX: Smart Video API search mapping so categories never load empty arrays!
   const photoApiFallback = isDefaultQuery ? 'nature aesthetic' : query;
-  const videoApiFallback = isDefaultQuery ? 'popular' : query;
+  
+  let videoApiFallback = isDefaultQuery ? 'popular' : query;
+  
+  // If we are looking for video loops, map your categories to terms video APIs understand best
+  if (mode === 'live' && !isDefaultQuery) {
+    const checkQuery = lowerQuery.trim();
+    if (checkQuery === 'anime') {
+        videoApiFallback = 'cyberpunk animation'; // Video loops matching anime aesthetics
+    } else if (checkQuery === 'marvel' || checkQuery === 'superhero') {
+        videoApiFallback = 'cgi neon background'; // High energy moving loops
+    } else if (checkQuery === 'minimalist' || checkQuery === 'minimal') {
+        videoApiFallback = 'abstract minimalist looping'; // Clean moving aesthetics
+    } else if (checkQuery === 'cars' || checkQuery === 'sports') {
+        videoApiFallback = 'supercar slow motion'; 
+    } else if (checkQuery === 'nature') {
+        videoApiFallback = 'cinematic nature 4k';
+    }
+  }
 
+  // --- CONTINUATION OF YOUR EXISTING CODE ---
   if (mode === 'live') {
     try { if (typeof getPexelsVideos === 'function') apiResults1 = await getPexelsVideos(videoApiFallback); } catch(e){}
     try { if (typeof getPixabayVideos === 'function') apiResults2 = await getPixabayVideos(videoApiFallback); } catch(e){}
