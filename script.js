@@ -1692,9 +1692,14 @@ function setMainCategory(category) {
     fetchGallery('');
 }
 
-function filter(query) {
+// Change "filter" to "filterCategory" on Line 1695
+function filterCategory(query) {
     document.querySelectorAll('.sub-btn').forEach(btn => btn.classList.remove('active'));
-    if (event) event.currentTarget.classList.add('active');
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    } else if (event && event.target) {
+        event.target.classList.add('active');
+    }
     fetchGallery(query);
 }
 
