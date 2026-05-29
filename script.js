@@ -1462,16 +1462,22 @@ async function fetchGallery(query = '') {
   }
 
   // Combine everything that succeeded
+  // Combine everything that succeeded
   let combinedResults = [...matchedManualItems, ...communityResults, ...apiResults1, ...apiResults2, ...apiResults3];
 
-  // 🌟 CRITICAL FIX: If it's a custom search query, prevent external un-tagged API nodes from flooding out matching entries
+  // 🌟 BULLETPROOF SEARCH FILTER: Prevents unmapped properties from breaking the array!
   if (!isDefaultQuery) {
     combinedResults = combinedResults.filter(item => {
-      if (item.fromAPI) return true; // External API results are already pre-filtered on their servers by keyword!
-      const titleMatch = item.title && item.title.toLowerCase().includes(lowerQuery);
-      const authorMatch = item.author && item.author.toLowerCase().includes(lowerQuery);
-      const tagMatch = item.tags && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
-      return titleMatch || authorMatch || tagMatch;
+      // If it comes from external APIs, it's already pre-filtered on their cloud servers by your keyword!
+      if (item.fromAPI) return true; 
+
+      const titleText = (item.title || '').toLowerCase();
+      const authorText = (item.author || '').toLowerCase();
+      
+      // Safely scan tags array
+      const tagsMatch = item.tags && Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+      
+      return titleText.includes(lowerQuery) || authorText.includes(lowerQuery) || tagsMatch;
     });
   }
 
