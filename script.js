@@ -1408,7 +1408,7 @@ async function fetchGallery(query = '') {
 
   const lowerQuery = query.toLowerCase().trim();
   const userDevice = window.innerWidth < 768 ? 'mobile' : 'pc';
-  const mode = currentMain;
+  const mode = currentMain || 'normal'; // Safe fallback tracking
 
   // 1. Establish if we are on a basic general landing path or an explicit keyword search
   const isDefaultQuery = (lowerQuery === 'trending' || lowerQuery === 'popular' || lowerQuery === '' || lowerQuery === 'mobile wallpaper' || lowerQuery === 'desktop wallpaper');
@@ -1464,14 +1464,14 @@ async function fetchGallery(query = '') {
   // Combine everything that succeeded
   let combinedResults = [...matchedManualItems, ...communityResults, ...apiResults1, ...apiResults2, ...apiResults3];
 
-  // 🌟 CRITICAL FIX: If it's a custom search query, prevent external un-tagged API nodes from flooding out matching entries
+  // 🌟 FIX THE COUPLING LOOP: Ensure API records aren't discarded if properties are blank
   if (!isDefaultQuery) {
     combinedResults = combinedResults.filter(item => {
-      if (item.fromAPI) return true; // External API results are already pre-filtered on their servers by keyword!
-      const titleMatch = item.title && item.title.toLowerCase().includes(lowerQuery);
-      const authorMatch = item.author && item.author.toLowerCase().includes(lowerQuery);
-      const tagMatch = item.tags && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
-      return titleMatch || authorMatch || tagMatch;
+      if (item.fromAPI) return true; // Already filtered on the live web servers by keyword
+      const titleText = (item.title || '').toLowerCase();
+      const authorText = (item.author || '').toLowerCase();
+      const tagsMatch = item.tags && Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+      return titleText.includes(lowerQuery) || authorText.includes(lowerQuery) || tagsMatch;
     });
   }
 
@@ -1651,12 +1651,21 @@ function displayItems(items, query = '') {
     });
 }
 // Navigation Logic
-function setMainCategory(type) {
-    currentMain = type;
+function setMainCategory(category) {
+    currentMain = category; // Saves state globally
+    
+    // Manage active visual state styles on navbar buttons
     document.querySelectorAll('.main-btn').forEach(btn => btn.classList.remove('active'));
-    // We use event.currentTarget to be safer
-    if (event) event.currentTarget.classList.add('active');
-    fetchGallery('popular');
+    const targetEvent = event || window.event;
+    if (targetEvent && targetEvent.target) {
+        targetEvent.target.classList.add('active');
+    }
+    
+    // Clear search bar text field on layout change so it resets cleanly
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) searchInput.value = '';
+    
+    fetchGallery('');
 }
 
 function filter(query) {
