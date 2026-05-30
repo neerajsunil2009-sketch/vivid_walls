@@ -1820,7 +1820,8 @@ async function handleWallpaperUpload(event) {
   const authorInput = document.getElementById('wall-author');
   const typeInput = document.getElementById('wall-type');
   const tagsInput = document.getElementById('wall-tags');
-
+// Paste this inside your handleWallpaperUpload function
+const wallpaperRatio = document.getElementById('wall-ratio').value; // Grabs "9-16" or "16-9"
   if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
     alert("Please select an image or video file to upload!");
     return;
