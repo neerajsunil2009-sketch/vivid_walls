@@ -1656,9 +1656,24 @@ function displayItems(items, query = '') {
     gallery.innerHTML = ''; 
 
     items.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'wall-card';
+    // 1. Get the user's live device type ('mobile' or 'pc')
+    const currentDevice = getDeviceType(); 
 
+    // 2. Strict Filter Check
+    // If it's a mobile upload (9-16) but the user is on a PC, skip it completely!
+    if (item.ratio === '9-16' && currentDevice === 'pc') {
+        return; 
+    }
+    
+    // If it's a PC upload (16-9) but the user is on a mobile screen, skip it completely!
+    if (item.ratio === '16-9' && currentDevice === 'mobile') {
+        return; 
+    }
+
+    // Your existing code continues normally right below...
+    const card = document.createElement('div');
+    card.className = 'wall-card';
+          
         // Combine all tags into a clean comma-separated string for Google bots to read
         const searchKeywords = item.tags ? item.tags.join(', ') : 'wallpaper';
         // Create a SEO friendly title string
@@ -1865,6 +1880,7 @@ const wallpaperRatio = document.getElementById('wall-ratio').value; // Grabs "9-
           title: title,
           author: author,
           type: type,
+          ratio: wallpaperRatio, // Store the aspect ratio in the database
           url: assetPublicUrl,
           tags: tagsString
         }
