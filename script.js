@@ -1249,6 +1249,24 @@ const manualVideos = [
     },
     {
         type: 'video',
+        preview: 'videos/Furina.mp4',
+        download: 'videos/Furina.mp4',
+        author: 'Akshay',
+        tags: ['anime', 'trending', 'aesthetic', 'dancing girl','girl'],
+        aspect: 'pc',
+        isTrending: true
+    },
+      {
+        type: 'video',
+        preview: 'videos/Hutao COOOK.mp4',
+        download: 'videos/Hutao COOOK.mp4',
+        author: 'Akshay',
+        tags: ['anime', 'trending', 'aesthetic', 'dancing girl','girl'],
+        aspect: 'pc',
+        isTrending: true
+    },
+    {
+        type: 'video',
         type: 'video',
         preview: 'videos/vividwalls.webm',
         download: 'videos/vividwalls.webm',
