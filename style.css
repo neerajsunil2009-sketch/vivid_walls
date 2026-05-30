@@ -365,3 +365,20 @@ header {
   cursor: pointer;
   margin-top: 10px;
 }
+/* --- 8. Community Upload Responsive Filters --- */
+
+/* If someone is viewing on a wide screen (PC / Laptop) */
+@media (min-width: 769px) {
+    /* Hide all uploaded wallpapers that have the mobile ratio */
+    .wall-card.ratio-9-16 {
+        display: none !important;
+    }
+}
+
+/* If someone is viewing on a narrow screen (Mobile phone) */
+@media (max-width: 768px) {
+    /* Hide all uploaded wallpapers that have the PC ratio */
+    .wall-card.ratio-16-9 {
+        display: none !important;
+    }
+}
