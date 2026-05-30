@@ -1656,24 +1656,9 @@ function displayItems(items, query = '') {
     gallery.innerHTML = ''; 
 
     items.forEach(item => {
-    // 1. Get the user's live device type ('mobile' or 'pc')
-    const currentDevice = getDeviceType(); 
+        const card = document.createElement('div');
+        card.className = 'wall-card';
 
-    // 2. Strict Filter Check
-    // If it's a mobile upload (9-16) but the user is on a PC, skip it completely!
-    if (item.ratio === '9-16' && currentDevice === 'pc') {
-        return; 
-    }
-    
-    // If it's a PC upload (16-9) but the user is on a mobile screen, skip it completely!
-    if (item.ratio === '16-9' && currentDevice === 'mobile') {
-        return; 
-    }
-
-    // Your existing code continues normally right below...
-    const card = document.createElement('div');
-    card.className = 'wall-card';
-          
         // Combine all tags into a clean comma-separated string for Google bots to read
         const searchKeywords = item.tags ? item.tags.join(', ') : 'wallpaper';
         // Create a SEO friendly title string
@@ -1701,10 +1686,7 @@ function displayItems(items, query = '') {
             tagKeyword = item.tags[0].trim().toLowerCase().replace(/\s+/g, '_');
         }
         const fileName = `${tagKeyword}${extension}`;
-         // Paste this right above card.innerHTML
-        const itemRatio = item.ratio || '16-9';
-        // Add the aspect ratio class cleanly to the wrapper card element
-        card.className = `wall-card ratio-${itemRatio}`;
+
         // 3. Render the card element layout structure
         card.innerHTML = `
             ${trendingBadge}
@@ -1838,8 +1820,7 @@ async function handleWallpaperUpload(event) {
   const authorInput = document.getElementById('wall-author');
   const typeInput = document.getElementById('wall-type');
   const tagsInput = document.getElementById('wall-tags');
-// Paste this inside your handleWallpaperUpload function
-const wallpaperRatio = document.getElementById('wall-ratio').value; // Grabs "9-16" or "16-9"
+
   if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
     alert("Please select an image or video file to upload!");
     return;
@@ -1880,7 +1861,6 @@ const wallpaperRatio = document.getElementById('wall-ratio').value; // Grabs "9-
           title: title,
           author: author,
           type: type,
-          ratio: wallpaperRatio, // Store the aspect ratio in the database
           url: assetPublicUrl,
           tags: tagsString
         }
