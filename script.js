@@ -1686,7 +1686,10 @@ function displayItems(items, query = '') {
             tagKeyword = item.tags[0].trim().toLowerCase().replace(/\s+/g, '_');
         }
         const fileName = `${tagKeyword}${extension}`;
-
+         // Paste this right above card.innerHTML
+        const itemRatio = item.ratio || '16-9';
+        // Add the aspect ratio class cleanly to the wrapper card element
+        card.className = `wall-card ratio-${itemRatio}`;
         // 3. Render the card element layout structure
         card.innerHTML = `
             ${trendingBadge}
