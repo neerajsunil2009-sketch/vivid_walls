@@ -46,10 +46,14 @@ header {
     margin: 20px 0;
 }
 
+/* --- 3. Sub Navigation & Scroll Container Updates --- */
+
 .sub-nav {
     display: flex;
     justify-content: center;
     padding: 10px 0 30px 0;
+    width: 100%;             /* Ensures container takes full width */
+    overflow: hidden;        /* Prevents layout breaks */
 }
 
 .scroll-container {
@@ -57,12 +61,23 @@ header {
     gap: 12px;
     overflow-x: auto;
     padding: 10px 20px;
+    width: 100%;             /* Keeps container dynamic on mobile screens */
     max-width: 1000px;
-    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    scrollbar-width: none;   /* Hide scrollbar for Firefox */
+    
+    /* Crucial properties for mobile swiping */
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch; 
 }
 
 .scroll-container::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome/Safari */
+    display: none;           /* Hide scrollbar for Chrome/Safari */
+}
+
+/* Add this properties safety block directly under them */
+.scroll-container .sub-btn {
+    flex-shrink: 0;          /* Essential: Prevents the mobile browser from squishing the buttons narrow */
+    white-space: nowrap;     /* Keeps "Car & Bike" safely on a single line */
 }
 
 /* Buttons Styling */
