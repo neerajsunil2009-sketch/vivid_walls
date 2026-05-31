@@ -125,6 +125,24 @@
     </form>
   </div>
 </div>
+<style>
+  /* 🚀 Force HilltopAds container to stay on top of Monetag */
+  
+  /* Target HilltopAds dynamic script containers */
+  div[id^="ha-"], 
+  div[class^="ha-"],
+  iframe[src*="pricklyassociation.com"] {
+    z-index: 2147483647 !important; /* Maximum possible 32-bit integer depth */
+    position: fixed !important;
+  }
+
+  /* Keep Monetag slightly lower down the stack if they collide */
+  div[id^="p-"], 
+  div[class^="p-"],
+  div[id^="protag-"] {
+    z-index: 9999999 !important; /* High, but lower than HilltopAds */
+  }
+</style>
 <script>(function(s){s.dataset.zone='11074596',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <script>
 (function(ith){
