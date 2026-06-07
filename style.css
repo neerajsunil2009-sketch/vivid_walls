@@ -227,14 +227,14 @@ header {
 }
 header {
     position: relative; /* Allows absolute positioning for children */
-    padding: 200px 50px;
+    padding: 150px 50px;
     text-align: center;
 }
 
 .search-container {
     position: absolute;
-    top: 20px;
-    right: 30px;
+    top: 300px;
+    right: 605px;
     display: flex;
     gap: 10px;
 }
