@@ -27,7 +27,7 @@ body {
 /* --- 2. Header & Branding --- */
 header {
     text-align: center;
-    padding: 100px 50px;
+    padding: 200px 100px;
     background: linear-gradient(to bottom, rgba(66, 135, 255, 0.8), transparent);
 }
 
