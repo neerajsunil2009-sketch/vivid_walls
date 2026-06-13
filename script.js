@@ -1220,6 +1220,17 @@ const manualPhotos = [
 ];
 const manualVideos = [
   {
+    
+        type: 'video', // Essential for the displayItems logic
+        preview: 'videos/evelyn.3840x2160.mp4.', // Path to your local video
+        download: 'videos/evelyn.3840x2160.mp4',
+        author: 'Akshay',
+        tags: ['trending', 'aesthetic', 'live', 'evelyn','girl'],
+        aspect: 'pc', 
+        isTrending: true
+    },
+  {
+    
         type: 'video', // Essential for the displayItems logic
         preview: 'videos/threadsdownloader.com_b5a024.mp4', // Path to your local video
         download: 'videos/threadsdownloader.com_b5a024.mp4',
