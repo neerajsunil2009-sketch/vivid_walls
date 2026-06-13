@@ -1215,8 +1215,17 @@ const manualPhotos = [
     author: 'Akshay',
     tags: ['car bike', 'mcqueen', 'cars', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
     isTrending: true
+  },
+  {
+    type: 'image',
+    preview: 'images/evelyn1.png',
+    download: 'images/evelyn1.png',
+    aspect: 'pc',
+    author: 'Akshay',
+    tags: ['girl', 'evelyn', 'aesthetic', 'trending', 'pc wallpaper', '4k wallpaper', 'all'],
+    isTrending: true
   }
-    
+  
 ];
 const manualVideos = [
   {
