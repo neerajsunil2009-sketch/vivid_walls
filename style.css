@@ -56,18 +56,16 @@ header {
     overflow: hidden;        /* Prevents layout breaks */
 }
 
-.scroll-container {
+category-container {
     display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding: 10px 20px;
-    width: 100%;             /* Keeps container dynamic on mobile screens */
-    max-width: 1000px;
-    scrollbar-width: none;   /* Hide scrollbar for Firefox */
+    overflow-x: auto;          /* Allows horizontal scrolling */
+    white-space: nowrap;       /* Keeps all buttons on a single line */
+    scroll-behavior: smooth;   /* Makes the wheel transition smooth */
+    width: 100%;               /* Spans across the header */
     
-    /* Crucial properties for mobile swiping */
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch; 
+    /* Hide the scrollbar for a cleaner look */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
 }
 
 .scroll-container::-webkit-scrollbar {

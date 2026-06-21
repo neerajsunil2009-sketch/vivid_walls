@@ -1954,3 +1954,16 @@ async function getCommunityWalls(query = '', activeMode = 'home') {
     return [];
   }
 }
+// 1. Select your category container element
+const categoryBar = document.querySelector('.category-container');
+
+if (categoryBar) {
+    // 2. Listen for the mouse wheel event
+    categoryBar.addEventListener('wheel', (evt) => {
+        // Prevent the main page from scrolling up/down while browsing categories
+        evt.preventDefault();
+        
+        // Translate vertical scroll wheel movement (deltaY) into horizontal movement (scrollLeft)
+        categoryBar.scrollLeft += evt.deltaY;
+    });
+}
