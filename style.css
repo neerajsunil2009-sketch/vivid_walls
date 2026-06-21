@@ -72,6 +72,10 @@ header {
     display: none;
 }
 
+.scroll-container::-webkit-scrollbar {
+    display: none;           /* Hide scrollbar for Chrome/Safari */
+}
+
 /* Add this properties safety block directly under them */
 .scroll-container .sub-btn {
     flex-shrink: 0;          /* Essential: Prevents the mobile browser from squishing the buttons narrow */
