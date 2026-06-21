@@ -1958,12 +1958,11 @@ async function getCommunityWalls(query = '', activeMode = 'home') {
 const categoryBar = document.querySelector('.category-container');
 
 if (categoryBar) {
-    // 2. Listen for the mouse wheel event
     categoryBar.addEventListener('wheel', (evt) => {
-        // Prevent the main page from scrolling up/down while browsing categories
-        evt.preventDefault();
-        
-        // Translate vertical scroll wheel movement (deltaY) into horizontal movement (scrollLeft)
-        categoryBar.scrollLeft += evt.deltaY;
+        // Only trigger this for desktop screens (wider than 1024px)
+        if (window.innerWidth >= 1024) {
+            evt.preventDefault();
+            categoryBar.scrollLeft += evt.deltaY;
+        }
     });
 }
